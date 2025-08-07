@@ -198,7 +198,7 @@
   <h1>👤 ผู้เล่น</h1>
 
   <div id="game-container">
-    <img id="character-img" src="mind.png" alt="ตัวละคร" />
+    <img id="character-img" src="https://i.imgur.com/5YVb3Nm.png" alt="ตัวละคร" />
 
     <div id="nameInputContainer">
       <label>กรุณากรอกชื่อ:
@@ -271,10 +271,12 @@
         const game = snap.val();
         if (!game) {
           statusDiv.innerText = "❌ เกมไม่พร้อมใช้งาน";
+		  
           choicesDiv.innerHTML = "";
           statusDiv.style.display = "block";
           timerDiv.innerText = "";
           scoreDisplay.innerText = "";
+		  location.reload();
           return;
         }
 
@@ -365,4 +367,3 @@
   </script>
 </body>
 </html>
-
