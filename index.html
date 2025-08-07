@@ -217,7 +217,10 @@ button:focus {
     <button onclick="endGame()">⛔ จบเกม</button>
     <button onclick="resetGame()">🔄 เริ่มใหม่ (ล้างข้อมูล)</button>
   </div>
-
+<audio id="bgm" loop>
+  <source src="sounds/background-music.mp3" type="audio/mpeg" />
+  Your browser does not support the audio element.
+</audio>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
@@ -251,6 +254,12 @@ button:focus {
     let timeLeft = 10;
 
     function startGame() {
+	      const bgm = document.getElementById("bgm");
+  if (bgm) {
+    bgm.play().catch(err => {
+      console.warn("เพลงยังไม่สามารถเล่นได้จนกว่าผู้ใช้จะคลิกบางอย่าง", err);
+    });
+  }
       db.ref("games/" + gameId + "/players").once("value").then((snap) => {
         const players = snap.val() || {};
         db.ref("games/" + gameId).update({
@@ -381,4 +390,5 @@ button:focus {
   </script>
 </body>
 </html>
+
 
