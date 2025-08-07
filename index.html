@@ -261,10 +261,9 @@ function startGame() {
 
     if (playerCount === 0) {
       alert("⚠️ กรุณาให้ผู้เล่นเข้าร่วมก่อนเริ่มเกม");
-      return; // ไม่เริ่มเกม
+      return;
     }
 
-    // เล่นเพลงถ้ามี
     const bgm = document.getElementById("bgm");
     if (bgm) {
       bgm.play().catch(err => {
@@ -272,7 +271,6 @@ function startGame() {
       });
     }
 
-    // เริ่มเกม
     db.ref("games/" + gameId).update({
       status: "playing",
       currentQuestionIndex: 0,
@@ -280,18 +278,6 @@ function startGame() {
       players: players
     });
 
-    showCountdown();
-  });
-}
-
-  db.ref("games/" + gameId + "/players").once("value").then((snap) => {
-    const players = snap.val() || {};
-    db.ref("games/" + gameId).update({
-      status: "playing",
-      currentQuestionIndex: 0,
-      questions: sampleQuestions,
-      players: players
-    });
     showCountdown();
   });
 }
@@ -414,6 +400,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
