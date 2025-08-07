@@ -217,9 +217,9 @@ button:focus {
     <button onclick="endGame()">⛔ จบเกม</button>
     <button onclick="resetGame()">🔄 เริ่มใหม่ (ล้างข้อมูล)</button>
   </div>
-<audio id="bgm" loop>
-  <source src="background-music.mp3" type="audio" /></audio>
-  <script>
+<audio id="bgm" loop preload="auto">
+  <source src="background-music.mp3" type="audio/mpeg">
+</audio>
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
       authDomain: "gameddc-78b15.firebaseapp.com",
@@ -251,24 +251,27 @@ button:focus {
     let countdown = null;
     let timeLeft = 10;
 
-    function startGame() {
-	      const bgm = document.getElementById("bgm");
-  if (bgm) {
-    bgm.play().catch(err => {
-      console.warn("เพลงยังไม่สามารถเล่นได้จนกว่าผู้ใช้จะคลิกบางอย่าง", err);
+ function startGame() {
+  const bgm = document.getElementById("bgm");
+  if (bgm && bgm.paused) {
+    bgm.play().then(() => {
+      console.log("🎵 เพลงเริ่มเล่นแล้ว");
+    }).catch(err => {
+      console.warn("⚠️ เพลงยังเล่นไม่ได้จนกว่าจะมี interaction จากผู้ใช้:", err);
     });
   }
-      db.ref("games/" + gameId + "/players").once("value").then((snap) => {
-        const players = snap.val() || {};
-        db.ref("games/" + gameId).update({
-          status: "playing",
-          currentQuestionIndex: 0,
-          questions: sampleQuestions,
-          players: players
-        });
-        showCountdown();
-      });
-    }
+
+  db.ref("games/" + gameId + "/players").once("value").then((snap) => {
+    const players = snap.val() || {};
+    db.ref("games/" + gameId).update({
+      status: "playing",
+      currentQuestionIndex: 0,
+      questions: sampleQuestions,
+      players: players
+    });
+    showCountdown();
+  });
+}
 
     function nextQuestion() {
       db.ref("games/" + gameId + "/currentQuestionIndex").once("value").then((snap) => {
@@ -388,6 +391,7 @@ button:focus {
   </script>
 </body>
 </html>
+
 
 
 
