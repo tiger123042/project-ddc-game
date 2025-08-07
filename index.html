@@ -328,8 +328,8 @@ function startGame() {
           `<button disabled>${choice}</button>`
         ).join('');
       } else if (game.status === "ended") {
-        document.getElementById("dialog-box").innerText = "🎉 เกมจบแล้ว";
 	            wrongSound.play();
+        document.getElementById("dialog-box").innerText = "🎉 เกมจบแล้ว";	      
         document.getElementById("choices").innerHTML = "";
       } else {
         document.getElementById("dialog-box").innerText = "";
@@ -404,6 +404,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
