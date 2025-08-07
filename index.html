@@ -228,7 +228,7 @@ function downloadScores() {
   const gameRef = db.ref("games/" + gameId + "/players");
   gameRef.once("value").then((snapshot) => {
     const players = snapshot.val() || {};
-    let content = "📊 รายงานคะแนนนักเรียน (เรียงจากมากไปน้อย)\n\n";
+    let content = "📊 รายงานคะแนนนักเรียน \n\n";
 
     // 🔽 แปลงเป็น array แล้วเรียงคะแนนจากมากไปน้อย
     const sortedPlayers = Object.entries(players).sort(([, a], [, b]) => (b.score || 0) - (a.score || 0));
@@ -434,6 +434,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
