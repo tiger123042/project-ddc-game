@@ -192,6 +192,16 @@
         width: 140px;
       }
     }
+      .correct {
+    background-color: #28a745 !important; /* สีเขียว */
+    box-shadow: 0 0 12px 4px #28a745aa !important;
+    color: white !important;
+  }
+  .wrong {
+    background-color: #dc3545 !important; /* สีแดง */
+    box-shadow: 0 0 12px 4px #dc3545aa !important;
+    color: white !important;
+  }
   </style>
 </head>
 <body>
@@ -326,26 +336,35 @@
       });
     }
 
-    function submitAnswer(choiceIdx, correctIdx, questionIndex) {
-      if (answered) return;
-      answered = true;
-      clearInterval(timerInterval);
+   function submitAnswer(choiceIdx, correctIdx, questionIndex) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
 
-      let gotItRight = (choiceIdx === correctIdx);
-      if (gotItRight) score++;
+  let gotItRight = (choiceIdx === correctIdx);
+  if (gotItRight) score++;
 
-      db.ref(`games/${gameId}/players/${playerKey}`).update({ score });
+  db.ref(`games/${gameId}/players/${playerKey}`).update({ score });
 
-      db.ref(`games/${gameId}/answers/${playerKey}`).set({
-        choiceIndex: choiceIdx,
-        questionIndex: questionIndex,
-        timestamp: Date.now()
-      });
+  db.ref(`games/${gameId}/answers/${playerKey}`).set({
+    choiceIndex: choiceIdx,
+    questionIndex: questionIndex,
+    timestamp: Date.now()
+  });
 
-      updateScoreDisplay();
+  updateScoreDisplay();
 
-      document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
+  // เปลี่ยนสีปุ่มตามถูกผิด
+  document.querySelectorAll("#choices button").forEach((btn, idx) => {
+    btn.disabled = true;
+    if (idx === correctIdx) {
+      btn.classList.add('correct');
     }
+    if (idx === choiceIdx && choiceIdx !== correctIdx) {
+      btn.classList.add('wrong');
+    }
+  });
+}
 
     function updateScore(game) {
       if (playerKey && game.players && game.players[playerKey]) {
@@ -376,3 +395,4 @@
   </script>
 </body>
 </html>
+
