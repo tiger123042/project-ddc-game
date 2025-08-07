@@ -140,6 +140,8 @@
       text-align: center;
       z-index: 20;
     }
+
+   
     #nameInputContainer label {
       font-weight: bold;
       color: #d6336c;
@@ -229,8 +231,13 @@
   <audio id="bgm" loop preload="auto">
     <source src="background-music.mp3" type="audio/mpeg">
   </audio>
-
+<audio id="correct-sound" src="correct.mp3" preload="auto"></audio>
+<audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
+<audio id="yay-sound" src="yay.mp3" preload="auto"></audio>
   <script>
+      const correctSound = document.getElementById('correct-sound');
+  const yaySound = document.getElementById('yay-sound');
+  const wrongSound = document.getElementById('wrong-sound');
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
       authDomain: "gameddc-78b15.firebaseapp.com",
@@ -336,7 +343,7 @@
       });
     }
 
-   function submitAnswer(choiceIdx, correctIdx, questionIndex) {
+  function submitAnswer(choiceIdx, correctIdx, questionIndex) {
   if (answered) return;
   answered = true;
   clearInterval(timerInterval);
@@ -364,6 +371,17 @@
       btn.classList.add('wrong');
     }
   });
+
+  // เล่นเสียงแยกตามถูกผิด
+  if (gotItRight) {
+    correctSound.play();
+    // เล่นเสียง 'yay' เลยหลัง correct เสร็จ 1 วิ (ถ้าต้องการ)
+    setTimeout(() => {
+      yaySound.play();
+    }, 1000);
+  } else {
+    wrongSound.play();
+  }
 }
 
     function updateScore(game) {
@@ -395,4 +413,5 @@
   </script>
 </body>
 </html>
+
 
