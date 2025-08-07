@@ -215,7 +215,9 @@
 
     <div id="score-display"></div>
   </div>
-
+<audio id="bgm" loop preload="auto">
+  <source src="background-music.mp3" type="audio/mpeg">
+</audio>
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
@@ -289,6 +291,16 @@
           currentIndex = -1;
         } else if (game.status === "playing") {
           if (game.currentQuestionIndex !== currentIndex && game.questions[game.currentQuestionIndex]) {
+		    const bgm = document.getElementById("bgm");
+  if (bgm && bgm.paused) {
+    bgm.play().then(() => {
+      console.log("🎵 เพลงเริ่มเล่นแล้ว");
+    }).catch(err => {
+      console.warn("⚠️ เพลงยังเล่นไม่ได้จนกว่าจะมี interaction จากผู้ใช้:", err);
+    });
+  }
+
+
             currentIndex = game.currentQuestionIndex;
             answered = false;
             clearInterval(timerInterval);
@@ -367,4 +379,5 @@
   </script>
 </body>
 </html>
+
 
