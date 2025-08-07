@@ -331,17 +331,25 @@
     }
 
     function showQuestion(question, qIndex) {
-      statusDiv.innerText = question.question;
-      choicesDiv.innerHTML = "";
+  statusDiv.innerText = question.question;
+  choicesDiv.innerHTML = "";
 
-      question.choices.forEach((choice, idx) => {
-        const btn = document.createElement("button");
-        btn.innerText = choice;
-        btn.disabled = false;
-        btn.onclick = () => submitAnswer(idx, question.answer, qIndex);
-        choicesDiv.appendChild(btn);
-      });
-    }
+  // แสดงภาพมายด์ตาม URL ที่มากับคำถาม
+  const characterImg = document.getElementById("character-img");
+  if (question.image) {
+    characterImg.src = question.image;
+  } else {
+    characterImg.src = "mind.png"; // รูป default
+  }
+
+  question.choices.forEach((choice, idx) => {
+    const btn = document.createElement("button");
+    btn.innerText = choice;
+    btn.disabled = false;
+    btn.onclick = () => submitAnswer(idx, question.answer, qIndex);
+    choicesDiv.appendChild(btn);
+  });
+}
 
   function submitAnswer(choiceIdx, correctIdx, questionIndex) {
   if (answered) return;
@@ -413,5 +421,6 @@
   </script>
 </body>
 </html>
+
 
 
