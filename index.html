@@ -315,13 +315,7 @@ function startGame() {
 }
 
     function nextQuestion() {
-	     // แสดงภาพมายด์ตาม URL ที่มากับคำถาม
-  const characterImg = document.getElementById("character-img");
-  if (question.image) {
-    characterImg.src = question.image;
-  } else {
-    characterImg.src = "mind.png"; // รูป default
-  }
+
       db.ref("games/" + gameId + "/currentQuestionIndex").once("value").then((snap) => {
         let current = snap.val() || 0;
         current++;
@@ -441,6 +435,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
