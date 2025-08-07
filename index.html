@@ -354,6 +354,7 @@ function startGame() {
 
       if (game.status === "playing" && qIndex < game.questions.length) {
         const q = game.questions[qIndex];
+	document.getElementById("character-img").src = q.image || "mind.png";
         document.getElementById("dialog-box").innerText = "❓ " + q.question;
         document.getElementById("choices").innerHTML = q.choices.map((choice, idx) => 
           `<button disabled>${choice}</button>`
@@ -435,6 +436,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
