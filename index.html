@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8" />
+  <title>Host - Quiz Game</title>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
+    body {
+      margin: 0;
+      font-family: 'Kanit', sans-serif;
+      background: #fef6e4 url('https://cdn.pixabay.com/photo/2016/11/29/10/07/notebook-1869347_1280.jpg') no-repeat center center fixed;
+      background-size: cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      overflow: hidden;
+      color: #3b2f2f;
+    }
+    h1 {
+      margin: 20px;
+      color: #d6336c;
+      text-shadow: 1px 1px 2px #fff;
+      font-size: 2.4rem;
+      text-align: center;
+    }
+    #game-container {
+      width: 90%;
+      max-width: 700px;
+      height: 70vh;
+      background: #fff8f0;
+      border-radius: 25px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 20px 40px 20px 320px; /* left padding ให้เหลือที่วางรูปตัวละคร */
+      position: relative;
+      overflow: hidden;
+      cursor: default;
+    }
+    #game-container::before {
+      content: "";
+      position: absolute;
+      top: 10px; bottom: 10px; left: 10px; right: 10px;
+      border: 3px dashed #d18ca4;
+      border-radius: 25px;
+      pointer-events: none;
+      mix-blend-mode: multiply;
+      opacity: 0.3;
+    }
+    #dialog-box {
+      max-width: 100%;
+      width: 100%;
+      padding: 10px;
+      font-size: 1.2em;
+      word-wrap: break-word;
+      word-break: break-word;
+      box-sizing: border-box;
+      background-color: #fff;
+      border-radius: 10px;
+      margin-bottom: 12px;
+      position: relative;
+      z-index: 10;
+      min-height: 70px;
+      font-weight: bold;
+      color: #3b2f2f;
+    }
+    #choices {
+      margin-top: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: center;
+      z-index: 20;
+    }
+    #choices button {
+      flex: 1 1 45%;
+      background: #d6336c;
+      color: #fff;
+      border: none;
+      border-radius: 16px;
+      padding: 14px;
+      font-size: 1rem;
+      cursor: pointer;
+      transition: background 0.25s;
+      box-shadow: 0 4px 8px #d6336c88;
+      user-select: none;
+    }
+    #choices button:hover:not(:disabled) {
+      background: #a6284a;
+      box-shadow: 0 6px 12px #a6284aaa;
+    }
+    #choices button:disabled {
+      background: #ccc;
+      color: #666;
+      cursor: default;
+      box-shadow: none;
+    }
+    #answerStats, #playerList {
+      margin-top: 20px;
+      background: #fff8f0cc;
+      border-radius: 15px;
+      padding: 15px 20px;
+      box-shadow: 0 6px 12px #d18ca4aa;
+      max-width: 100%;
+      font-weight: bold;
+      color: #3b2f2f;
+      list-style: none;
+    }
+    #answerStats li, #playerList li {
+      margin-bottom: 6px;
+    }
+    #info-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 15px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      color: #ff6b6b;
+    }
+    #character-img {
+      position: absolute;
+      top: 120px;
+      left: 40px;
+      width: 280px;
+      height: 420px;
+      object-fit: contain;
+      user-select: none;
+      pointer-events: none;
+      z-index: 5;
+      filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
+    }
+    @media (max-width: 600px) {
+      #game-container {
+        padding-left: 20px;
+      }
+      #character-img {
+        display: none;
+      }
+      #choices button {
+        flex: 1 1 100%;
+      }
+    }
+	
+	/* ปุ่มทั้งหมด */
+button {
+  font-family: 'Kanit', sans-serif;
+  font-size: 1.2rem;
+  padding: 10px 20px;
+  margin: 8px;
+  border: none;
+  border-radius: 20px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* ปุ่มแต่ละสี */
+button[onclick*="startGame"] {
+  background-color: #fddde6;
+  color: #d63384;
+}
+button[onclick*="nextQuestion"] {
+  background-color: #ddf0ff;
+  color: #007bff;
+}
+button[onclick*="endGame"] {
+  background-color: #ffe4cc;
+  color: #ff6600;
+}
+button[onclick*="resetGame"] {
+  background-color: #e6ffdd;
+  color: #28a745;
+}
+
+/* hover effect */
+button:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+}
+
+/* focus (keyboard nav) */
+button:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+}
+  </style>
+</head>
+<body>
+  <h1>🎓 โฮสต์ควบคุมเกม</h1>
+
+  <div id="game-container">
+    <div id="dialog-box">กด เริ่มเกม เพื่อเริ่ม</div>
+
+    <div id="choices"></div>
+
+    <ul id="answerStats"></ul>
+
+    <ul id="playerList"></ul>
+
+    <div id="info-row"></div>
+
+    <img id="character-img" src="https://i.imgur.com/5YVb3Nm.png" alt="ตัวละคร" />
+  </div>
+
+  <div style="text-align:center; margin-top:10px; width:90%; max-width:700px;">
+    <button onclick="startGame()">▶️ เริ่มเกม</button>
+    <button onclick="nextQuestion()">➡️ คำถามถัดไป</button>
+    <button onclick="endGame()">⛔ จบเกม</button>
+    <button onclick="resetGame()">🔄 เริ่มใหม่ (ล้างข้อมูล)</button>
+  </div>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
+      authDomain: "gameddc-78b15.firebaseapp.com",
+      databaseURL: "https://gameddc-78b15-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "gameddc-78b15",
+      storageBucket: "gameddc-78b15.appspot.com",
+      messagingSenderId: "1029473303694",
+      appId: "1:1029473303694:web:d773ccddbb152495f79ddf",
+      measurementId: "G-8DB314K2EJ"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const gameId = "myGame";
+
+    const sampleQuestions = [
+      {
+        question: "600 คือกลุ่มหมวดหมู่ใดในระบบ DDC?",
+        choices: ["ศาสนา", "เทคโนโลยี", "ภาษา", "ประวัติศาสตร์"],
+        answer: 1
+      },
+      {
+        question: "100 คือกลุ่มหมวดหมู่ใดในระบบ DDC?",
+        choices: ["ปรัชญาและจิตวิทยา", "วิทยาศาสตร์", "ศิลปะ", "ภาษา"],
+        answer: 0
+      }
+    ];
+
+    let countdown = null;
+    let timeLeft = 10;
+
+    function startGame() {
+      db.ref("games/" + gameId + "/players").once("value").then((snap) => {
+        const players = snap.val() || {};
+        db.ref("games/" + gameId).update({
+          status: "playing",
+          currentQuestionIndex: 0,
+          questions: sampleQuestions,
+          players: players
+        });
+        showCountdown();
+      });
+    }
+
+    function nextQuestion() {
+      db.ref("games/" + gameId + "/currentQuestionIndex").once("value").then((snap) => {
+        let current = snap.val() || 0;
+        current++;
+        if (current >= sampleQuestions.length) {
+          endGame();
+          return;
+        }
+        db.ref("games/" + gameId + "/currentQuestionIndex").set(current);
+        db.ref("games/" + gameId + "/answers").remove(); // ล้างคำตอบเก่าเมื่อเปลี่ยนข้อ
+        showCountdown();
+      });
+    }
+
+    function endGame() {
+      db.ref("games/" + gameId + "/status").set("ended");
+      clearInterval(countdown);
+      document.getElementById("dialog-box").innerText = "🎉 เกมจบแล้ว";
+      document.getElementById("choices").innerHTML = "";
+      document.getElementById("answerStats").innerHTML = "";
+      document.getElementById("playerList").innerHTML = "";
+      document.getElementById("info-row").innerText = "";
+    }
+
+    function resetGame() {
+      db.ref("games").remove().then(() => {
+        location.reload();
+      });
+    }
+
+    // แสดงคำถามปัจจุบัน
+    db.ref("games/" + gameId).on("value", (snap) => {
+      const game = snap.val();
+      if (!game || !game.questions) return;
+
+      const qIndex = game.currentQuestionIndex || 0;
+
+      if (game.status === "playing" && qIndex < game.questions.length) {
+        const q = game.questions[qIndex];
+        document.getElementById("dialog-box").innerText = "❓ " + q.question;
+        document.getElementById("choices").innerHTML = q.choices.map((choice, idx) => 
+          `<button disabled>${choice}</button>`
+        ).join('');
+      } else if (game.status === "ended") {
+        document.getElementById("dialog-box").innerText = "🎉 เกมจบแล้ว";
+        document.getElementById("choices").innerHTML = "";
+      } else {
+        document.getElementById("dialog-box").innerText = "";
+        document.getElementById("choices").innerHTML = "";
+      }
+    });
+
+    // แสดงชื่อและคะแนนผู้เล่น
+    db.ref("games/" + gameId + "/players").on("value", (snap) => {
+      const players = snap.val() || {};
+      const ul = document.getElementById("playerList");
+      ul.innerHTML = "";
+      for (const key in players) {
+        const p = players[key];
+        const name = p.name || "ไม่ทราบชื่อ";
+        const score = p.score || 0;
+        const li = document.createElement("li");
+        li.innerText = `${name}: ${score} คะแนน`;
+        ul.appendChild(li);
+      }
+    });
+
+    function showCountdown() {
+      clearInterval(countdown);
+      timeLeft = 10;
+      updateAnswerStats(false);
+
+      countdown = setInterval(() => {
+        if (timeLeft <= 0) {
+          clearInterval(countdown);
+          updateAnswerStats(true);
+        } else {
+          document.getElementById("info-row").innerText = `⏳ เหลือเวลา ${timeLeft} วินาที`;
+          timeLeft--;
+        }
+      }, 1000);
+    }
+
+    function updateAnswerStats(showStats) {
+      const answerStatsEl = document.getElementById("answerStats");
+
+      if (!showStats) {
+        answerStatsEl.innerHTML = `<li>⏳ รอหมดเวลานับถอยหลัง...</li>`;
+        return;
+      }
+
+      db.ref("games/" + gameId).once("value").then((snap) => {
+        const game = snap.val();
+        if (!game || !game.questions) return;
+
+        const qIndex = game.currentQuestionIndex || 0;
+        const choices = (game.questions[qIndex] && game.questions[qIndex].choices) || [];
+
+        // อ่านคำตอบของผู้เล่นทั้งหมด
+        db.ref("games/" + gameId + "/answers").once("value").then((answersSnap) => {
+          const answers = answersSnap.val() || {};
+          let counts = new Array(choices.length).fill(0);
+          Object.values(answers).forEach(a => {
+            if (typeof a.choiceIndex === "number" && a.choiceIndex >= 0 && a.choiceIndex < choices.length) {
+              counts[a.choiceIndex]++;
+            }
+          });
+
+          answerStatsEl.innerHTML = choices.map((choice, i) =>
+            `<li>${choice}: ${counts[i]} คน</li>`
+          ).join("");
+          document.getElementById("info-row").innerText = "⏰ หมดเวลาแล้ว!";
+        });
+      });
+    }
+  </script>
+</body>
+</html>
