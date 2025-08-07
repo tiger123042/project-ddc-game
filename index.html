@@ -284,6 +284,7 @@ button:focus {
     let timeLeft = 10;
 
 function startGame() {
+	
   db.ref("games/" + gameId + "/players").once("value").then((snap) => {
     const players = snap.val() || {};
     const playerCount = Object.keys(players).length;
@@ -299,7 +300,7 @@ function startGame() {
         console.warn("เพลงยังไม่สามารถเล่นได้จนกว่าผู้ใช้จะคลิกบางอย่าง", err);
       });
     }
-
+    document.getElementById("playerList").style.display = "none";
     db.ref("games/" + gameId).update({
       status: "playing",
       currentQuestionIndex: 0,
@@ -431,6 +432,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
