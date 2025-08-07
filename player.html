@@ -330,26 +330,31 @@
       });
     }
 
-    function submitAnswer(choiceIdx, correctIdx, questionIndex) {
-      if (answered) return;
-      answered = true;
-      clearInterval(timerInterval);
+ function submitAnswer(choiceIdx, correctIdx, questionIndex) {
+  if (answered) return;
+  answered = true;
+  clearInterval(timerInterval);
 
-      let gotItRight = (choiceIdx === correctIdx);
-      if (gotItRight) score++;
+  let gotItRight = (choiceIdx === correctIdx);
+  if (gotItRight) score++;
 
-      db.ref(`games/${gameId}/players/${playerKey}`).update({ score });
+  db.ref(`games/${gameId}/players/${playerKey}`).update({ score });
 
-      db.ref(`games/${gameId}/answers/${playerKey}`).set({
-        choiceIndex: choiceIdx,
-        questionIndex: questionIndex,
-        timestamp: Date.now()
-      });
+  db.ref(`games/${gameId}/answers/${playerKey}`).set({
+    choiceIndex: choiceIdx,
+    questionIndex: questionIndex,
+    timestamp: Date.now()
+  });
 
-      updateScoreDisplay();
+  updateScoreDisplay();
 
-      document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
-    }
+  // แทนที่จะเฉลยทันที เราจะจำไว้ก่อน แล้วเฉลยตอนหมดเวลา
+  document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
+
+  // เก็บว่าเลือกอะไร
+  selectedIndex = choiceIdx;
+  correctAnswerIndex = correctIdx;
+}
 
     function updateScore(game) {
       if (playerKey && game.players && game.players[playerKey]) {
@@ -362,22 +367,42 @@
       scoreDisplay.innerText = `คะแนนของคุณ: ${score}`;
     }
 
-    function startTimer(seconds) {
-      let timeLeft = seconds;
-      timerDiv.innerText = `🕒 ${timeLeft} วินาที`;
-      timerInterval = setInterval(() => {
-        timeLeft--;
-        timerDiv.innerText = `🕒 ${timeLeft} วินาที`;
-        if (timeLeft <= 0) {
-          clearInterval(timerInterval);
-          timerDiv.innerText = "หมดเวลา!";
-          answered = true;
-          document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
-        }
-      }, 1000);
+ let selectedIndex = null;
+let correctAnswerIndex = null;
+
+function startTimer(seconds) {
+  let timeLeft = seconds;
+  timerDiv.innerText = `🕒 ${timeLeft} วินาที`;
+  timerInterval = setInterval(() => {
+    timeLeft--;
+    timerDiv.innerText = `🕒 ${timeLeft} วินาที`;
+    if (timeLeft <= 0) {
+      clearInterval(timerInterval);
+      timerDiv.innerText = "หมดเวลา!";
+      answered = true;
+
+      // ปิดปุ่มทุกปุ่ม
+      document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
+
+      // แสดงผลว่าถูกหรือผิด
+      if (selectedIndex !== null) {
+        const buttons = document.querySelectorAll("#choices button");
+        buttons.forEach((btn, idx) => {
+          if (idx === correctAnswerIndex) {
+            btn.style.backgroundColor = "#4caf50"; // เขียว = ถูก
+          } else if (idx === selectedIndex) {
+            btn.style.backgroundColor = "#f44336"; // แดง = ผิด
+          } else {
+            btn.style.backgroundColor = "#ccc"; // สีเทาอื่นๆ
+          }
+        });
+      }
     }
+  }, 1000);
+}
   </script>
 </body>
 </html>
+
 
 
