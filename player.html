@@ -96,7 +96,10 @@
       box-shadow: 0 6px 12px #a6284aaa;
     }
     #choices button:disabled {
+      background: #ccc;
+      color: #666;
       cursor: default;
+      box-shadow: none;
     }
     #score-display,
     #timer-display {
@@ -212,9 +215,11 @@
 
     <div id="score-display"></div>
   </div>
-<audio id="bgm" loop preload="auto">
-  <source src="background-music.mp3" type="audio/mpeg">
-</audio>
+
+  <audio id="bgm" loop preload="auto">
+    <source src="background-music.mp3" type="audio/mpeg">
+  </audio>
+
   <script>
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
@@ -237,10 +242,6 @@
     let answered = false;
     let currentIndex = -1;
     let timerInterval;
-
-    // ตัวแปรเก็บคำตอบที่เลือก และคำตอบที่ถูก
-    let selectedIndex = null;
-    let correctAnswerIndex = null;
 
     const nameInputContainer = document.getElementById("nameInputContainer");
     const joinBtn = document.getElementById("joinBtn");
@@ -298,8 +299,6 @@
 
             currentIndex = game.currentQuestionIndex;
             answered = false;
-            selectedIndex = null;
-            correctAnswerIndex = null;
             clearInterval(timerInterval);
             showQuestion(game.questions[currentIndex], currentIndex);
             startTimer(10);
@@ -322,9 +321,6 @@
         const btn = document.createElement("button");
         btn.innerText = choice;
         btn.disabled = false;
-        btn.style.backgroundColor = "#d6336c";
-        btn.style.color = "#fff";
-        btn.style.boxShadow = "0 4px 8px #d6336c88";
         btn.onclick = () => submitAnswer(idx, question.answer, qIndex);
         choicesDiv.appendChild(btn);
       });
@@ -334,9 +330,6 @@
       if (answered) return;
       answered = true;
       clearInterval(timerInterval);
-
-      selectedIndex = choiceIdx;
-      correctAnswerIndex = correctIdx;
 
       let gotItRight = (choiceIdx === correctIdx);
       if (gotItRight) score++;
@@ -351,7 +344,6 @@
 
       updateScoreDisplay();
 
-      // ปิดปุ่มก่อนเฉลยสี
       document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
     }
 
@@ -375,27 +367,9 @@
         if (timeLeft <= 0) {
           clearInterval(timerInterval);
           timerDiv.innerText = "หมดเวลา!";
-
-          // เฉลยสีปุ่มตามคำตอบถูก/ผิด
-          const buttons = document.querySelectorAll("#choices button");
-          buttons.forEach((btn, idx) => {
-            if (idx === correctAnswerIndex) {
-              btn.style.backgroundColor = "#4caf50"; // สีเขียวคำตอบถูก
-              btn.style.color = "#fff";
-              btn.style.boxShadow = "0 4px 8px #4caf5088";
-            } else if (idx === selectedIndex) {
-              btn.style.backgroundColor = "#f44336"; // สีแดงคำตอบผิด
-              btn.style.color = "#fff";
-              btn.style.boxShadow = "0 4px 8px #f4433688";
-            } else {
-              btn.style.backgroundColor = "#ccc"; // สีเทาปุ่มอื่น ๆ
-              btn.style.color = "#666";
-              btn.style.boxShadow = "none";
-            }
-            btn.disabled = true;
-          });
-
           answered = true;
+          // ปุ่มทั้งหมด disable ทันที แต่ไม่มีเฉลยสีปุ่ม
+          document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
         }
       }, 1000);
     }
