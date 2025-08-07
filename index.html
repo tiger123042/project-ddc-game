@@ -224,31 +224,33 @@ button:focus {
 	<audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
 	<script>
 
-		  function downloadScores() {
-    const gameRef = db.ref("games/" + gameId + "/players");
-    gameRef.once("value").then((snapshot) => {
-      const players = snapshot.val() || {};
-      let content = "📊 รายงานคะแนนนักเรียน\n\n";
+function downloadScores() {
+  const gameRef = db.ref("games/" + gameId + "/players");
+  gameRef.once("value").then((snapshot) => {
+    const players = snapshot.val() || {};
+    let content = "📊 รายงานคะแนนนักเรียน (เรียงจากมากไปน้อย)\n\n";
 
-      for (const id in players) {
-        const player = players[id];
-        const name = player.name || "ไม่ระบุชื่อ";
-        const score = player.score || 0;
-        content += `👤 ${name}: ${score} คะแนน\n`;
-      }
+    // 🔽 แปลงเป็น array แล้วเรียงคะแนนจากมากไปน้อย
+    const sortedPlayers = Object.entries(players).sort(([, a], [, b]) => (b.score || 0) - (a.score || 0));
 
-      // สร้าง Blob แล้วดาวน์โหลด
-      const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement("a");
-      a.href = url;
-      a.download = "คะแนนนักเรียน.txt";
-      document.body.appendChild(a);
-      a.click();
-      document.body.removeChild(a);
-      URL.revokeObjectURL(url);
-    });
-  }
+    for (const [, player] of sortedPlayers) {
+      const name = player.name || "ไม่ระบุชื่อ";
+      const score = player.score || 0;
+      content += `👤 ${name}: ${score} คะแนน\n`;
+    }
+
+    // สร้าง Blob แล้วดาวน์โหลด
+    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "คะแนนนักเรียน.txt";
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    URL.revokeObjectURL(url);
+  });
+}
 		const wrongSound = document.getElementById('wrong-sound');
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
@@ -432,6 +434,7 @@ function startGame() {
   </script>
 </body>
 </html>
+
 
 
 
