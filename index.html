@@ -254,15 +254,35 @@ button:focus {
     let countdown = null;
     let timeLeft = 10;
 
- function startGame() {
-  const bgm = document.getElementById("bgm");
-  if (bgm && bgm.paused) {
-    bgm.play().then(() => {
-      console.log("🎵 เพลงเริ่มเล่นแล้ว");
-    }).catch(err => {
-      console.warn("⚠️ เพลงยังเล่นไม่ได้จนกว่าจะมี interaction จากผู้ใช้:", err);
+function startGame() {
+  db.ref("games/" + gameId + "/players").once("value").then((snap) => {
+    const players = snap.val() || {};
+    const playerCount = Object.keys(players).length;
+
+    if (playerCount === 0) {
+      alert("⚠️ กรุณาให้ผู้เล่นเข้าร่วมก่อนเริ่มเกม");
+      return; // ไม่เริ่มเกม
+    }
+
+    // เล่นเพลงถ้ามี
+    const bgm = document.getElementById("bgm");
+    if (bgm) {
+      bgm.play().catch(err => {
+        console.warn("เพลงยังไม่สามารถเล่นได้จนกว่าผู้ใช้จะคลิกบางอย่าง", err);
+      });
+    }
+
+    // เริ่มเกม
+    db.ref("games/" + gameId).update({
+      status: "playing",
+      currentQuestionIndex: 0,
+      questions: sampleQuestions,
+      players: players
     });
-  }
+
+    showCountdown();
+  });
+}
 
   db.ref("games/" + gameId + "/players").once("value").then((snap) => {
     const players = snap.val() || {};
