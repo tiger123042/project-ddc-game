@@ -237,42 +237,6 @@ button:focus {
 	<audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
 	<script>
 
-// ฟังก์ชันโชว์ Leaderboard
-function showLeaderboard() {
-  const playersRef = db.ref("games/" + gameId + "/players");
-  playersRef.once("value").then(snapshot => {
-    const players = snapshot.val() || {};
-
-    // แปลงเป็น array แล้วเรียงคะแนน
-    const sortedPlayers = Object.values(players).sort((a, b) => b.score - a.score);
-
-    let tbodyHTML = "";
-    sortedPlayers.forEach((player, index) => {
-      tbodyHTML += `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${player.name || "ไม่ระบุชื่อ"}</td>
-          <td>${player.score || 0}</td>
-        </tr>
-      `;
-    });
-
-    // ใส่ข้อมูลในตาราง
-    document.getElementById("leaderboard-body").innerHTML = tbodyHTML;
-
-    // ซ่อนรูปมายด์ แล้วโชว์ Leaderboard
-    document.getElementById("character-container").style.display = "none";
-    document.getElementById("leaderboard").style.display = "block";
-  });
-}
-
-// ตัวอย่างการตรวจจับจบเกม (สถานะ gameOver)
-db.ref("games/" + gameId + "/status").on("value", (snapshot) => {
-  if (snapshot.val() === "gameOver") {
-    showLeaderboard();
-  }
-});
-		
 function downloadScores() {
   const gameRef = db.ref("games/" + gameId + "/players");
   gameRef.once("value").then((snapshot) => {
@@ -482,9 +446,48 @@ function startGame() {
         });
       });
     }
+
+		
+// ฟังก์ชันโชว์ Leaderboard
+function showLeaderboard() {
+  const playersRef = db.ref("games/" + gameId + "/players");
+  playersRef.once("value").then(snapshot => {
+    const players = snapshot.val() || {};
+
+    // แปลงเป็น array แล้วเรียงคะแนน
+    const sortedPlayers = Object.values(players).sort((a, b) => b.score - a.score);
+
+    let tbodyHTML = "";
+    sortedPlayers.forEach((player, index) => {
+      tbodyHTML += `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${player.name || "ไม่ระบุชื่อ"}</td>
+          <td>${player.score || 0}</td>
+        </tr>
+      `;
+    });
+
+    // ใส่ข้อมูลในตาราง
+    document.getElementById("leaderboard-body").innerHTML = tbodyHTML;
+
+    // ซ่อนรูปมายด์ แล้วโชว์ Leaderboard
+    document.getElementById("character-container").style.display = "none";
+    document.getElementById("leaderboard").style.display = "block";
+  });
+}
+
+// ตัวอย่างการตรวจจับจบเกม (สถานะ gameOver)
+db.ref("games/" + gameId + "/status").on("value", (snapshot) => {
+  if (snapshot.val() === "gameOver") {
+    showLeaderboard();
+  }
+});
+		
   </script>
 </body>
 </html>
+
 
 
 
