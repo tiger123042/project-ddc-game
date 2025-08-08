@@ -27,11 +27,11 @@
       font-size: 2.4rem;
       text-align: center;
     }
-  #game-container {
+#game-container {
+  position: relative;
   width: 90%;
   max-width: 700px;
-  /* ลบ height fixed */
-  height: auto;  /* หรือไม่ใส่ก็ได้ */
+  height: auto;
   background: #fff8f0;
   border-radius: 25px;
   box-shadow: 0 12px 24px rgba(0,0,0,0.3);
@@ -39,9 +39,9 @@
   flex-direction: column;
   justify-content: flex-start;
   padding: 20px 40px 20px 320px;
-  position: relative;
-  overflow: visible; /* หรือ ลบ overflow: hidden; ออกไปเลย */
+  overflow: visible;
   cursor: default;
+  box-sizing: border-box; /* เพิ่ม */
 }
     #game-container::before {
       content: "";
@@ -124,18 +124,18 @@
       font-weight: bold;
       color: #ff6b6b;
     }
-    #character-img {
-      position: absolute;
-      top: 120px;
-      left: 40px;
-      width: 280px;
-      height: 420px;
-      object-fit: contain;
-      user-select: none;
-      pointer-events: none;
-      z-index: 5;
-      filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
-    }
+ #character-img {
+  position: absolute;
+  top: 20px;   /* ปรับ */
+  left: 20px;  /* ปรับ */
+  width: 280px;
+  height: 420px;
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
+}
     #leaderboard {
       display: none;
       margin-top: 20px;
@@ -515,4 +515,5 @@
   </script>
 </body>
 </html>
+
 
