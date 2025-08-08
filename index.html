@@ -27,21 +27,22 @@
       font-size: 2.4rem;
       text-align: center;
     }
-    #game-container {
-      width: 90%;
-      max-width: 700px;
-      height: 70vh;
-      background: #fff8f0;
-      border-radius: 25px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 20px 40px 20px 320px; /* left padding ให้เหลือที่วางรูปตัวละคร */
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-    }
+  #game-container {
+  width: 90%;
+  max-width: 700px;
+  /* ลบ height fixed */
+  height: auto;  /* หรือไม่ใส่ก็ได้ */
+  background: #fff8f0;
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px 40px 20px 320px;
+  position: relative;
+  overflow: visible; /* หรือ ลบ overflow: hidden; ออกไปเลย */
+  cursor: default;
+}
     #game-container::before {
       content: "";
       position: absolute;
@@ -514,3 +515,4 @@
   </script>
 </body>
 </html>
+
