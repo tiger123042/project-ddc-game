@@ -28,22 +28,19 @@
       text-align: center;
     }
     #game-container {
-      position: relative;
       width: 90%;
       max-width: 700px;
-      height: auto;
-      max-height: 85vh;          /* จำกัดสูงสุด ไม่ล้นจอ */
-      overflow-y: auto;          /* เลื่อนดูข้อมูลใน container ได้ */
+      height: 70vh;
       background: #fff8f0;
       border-radius: 25px;
       box-shadow: 0 12px 24px rgba(0,0,0,0.3);
       display: flex;
       flex-direction: column;
       justify-content: flex-start;
-      padding: 20px 40px 20px 280px;  /* ปรับ padding-left ให้พอดีกับภาพ */
-      overflow-x: hidden;        /* ซ่อน overflow แนวนอน */
+      padding: 20px 40px 20px 320px; /* left padding ให้เหลือที่วางรูปตัวละคร */
+      position: relative;
+      overflow: hidden;
       cursor: default;
-      box-sizing: border-box;
     }
     #game-container::before {
       content: "";
@@ -54,7 +51,6 @@
       pointer-events: none;
       mix-blend-mode: multiply;
       opacity: 0.3;
-      z-index: 1;
     }
     #dialog-box {
       max-width: 100%;
@@ -114,7 +110,6 @@
       font-weight: bold;
       color: #3b2f2f;
       list-style: none;
-      overflow-wrap: break-word;
     }
     #answerStats li, #playerList li {
       margin-bottom: 6px;
@@ -127,15 +122,13 @@
       font-size: 1.2rem;
       font-weight: bold;
       color: #ff6b6b;
-      word-break: break-word;
     }
     #character-img {
       position: absolute;
-      top: 20px;
-      left: 20px;
-      width: 240px;
-      height: auto;
-      max-height: 420px;
+      top: 120px;
+      left: 40px;
+      width: 280px;
+      height: 420px;
       object-fit: contain;
       user-select: none;
       pointer-events: none;
@@ -164,9 +157,7 @@
     }
     @media (max-width: 600px) {
       #game-container {
-        padding-left: 20px !important;
-        max-height: none;
-        overflow-y: visible;
+        padding-left: 20px;
       }
       #character-img {
         display: none;
@@ -372,7 +363,6 @@
 
       if (game.status === "playing" && qIndex < game.questions.length) {
         const q = game.questions[qIndex];
-        document.getElementById("character-img").style.display = "block";
         document.getElementById("character-img").src = q.image || "mind.png";
         document.getElementById("dialog-box").innerText = "❓ " + q.question;
         document.getElementById("choices").innerHTML = q.choices.map((choice, idx) =>
@@ -466,37 +456,61 @@
 
         // แปลงเป็น array แล้วเรียงคะแนนจากมากไปน้อย
         const sortedPlayers = Object.entries(players).sort(([, a], [, b]) => (b.score || 0) - (a.score || 0));
-        sortedPlayers.forEach(([key, p], idx) => {
-          content += `${idx + 1}. ${p.name || "ไม่ทราบชื่อ"}: ${p.score || 0} คะแนน\n`;
-        });
 
-        // สร้างไฟล์ .txt ให้ดาวน์โหลด
-        const blob = new Blob([content], {type: "text/plain;charset=utf-8"});
+        for (const [, player] of sortedPlayers) {
+          const name = player.name || "ไม่ระบุชื่อ";
+          const score = player.score || 0;
+          content += `👤 ${name}: ${score} คะแนน\n`;
+        }
+
+        // สร้าง Blob แล้วดาวน์โหลด
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
         const url = URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
         a.download = "คะแนนนักเรียน.txt";
+        document.body.appendChild(a);
         a.click();
+        document.body.removeChild(a);
         URL.revokeObjectURL(url);
       });
     }
 
-    // แสดง leaderboard ตอนจบเกม
+    // ฟังก์ชันโชว์ Leaderboard
     function showLeaderboard() {
-      const leaderboardDiv = document.getElementById("leaderboard");
-      const tbody = document.getElementById("leaderboard-body");
-      db.ref("games/" + gameId + "/players").once("value").then((snap) => {
-        const players = snap.val() || {};
-        const sortedPlayers = Object.entries(players).sort(([, a], [, b]) => (b.score || 0) - (a.score || 0));
-        tbody.innerHTML = "";
-        sortedPlayers.forEach(([key, p], idx) => {
-          const tr = document.createElement("tr");
-          tr.innerHTML = `<td>${idx + 1}</td><td>${p.name || "ไม่ทราบชื่อ"}</td><td>${p.score || 0}</td>`;
-          tbody.appendChild(tr);
+      const playersRef = db.ref("games/" + gameId + "/players");
+      playersRef.once("value").then(snapshot => {
+        const players = snapshot.val() || {};
+
+        // แปลงเป็น array แล้วเรียงคะแนน
+        const sortedPlayers = Object.values(players).sort((a, b) => (b.score || 0) - (a.score || 0));
+
+        let tbodyHTML = "";
+        sortedPlayers.forEach((player, index) => {
+          tbodyHTML += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${player.name || "ไม่ระบุชื่อ"}</td>
+              <td>${player.score || 0}</td>
+            </tr>
+          `;
         });
-        leaderboardDiv.style.display = "block";
+
+        // ใส่ข้อมูลในตาราง
+        document.getElementById("leaderboard-body").innerHTML = tbodyHTML;
+
+        // ซ่อนรูปตัวละคร แล้วโชว์ Leaderboard
+        document.getElementById("character-img").style.display = "none";
+        document.getElementById("leaderboard").style.display = "block";
       });
     }
+
+    // ตรวจจับสถานะเกมเปลี่ยน ถ้า ended ให้โชว์ Leaderboard
+    db.ref("games/" + gameId + "/status").on("value", (snapshot) => {
+      if (snapshot.val() === "ended") {
+        showLeaderboard();
+      }
+    });
   </script>
 </body>
 </html>
