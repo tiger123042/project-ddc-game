@@ -5,7 +5,7 @@
   <title>จัดหมู่หนังสือ DDC</title>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Kanit&display=swap" rel="stylesheet" />
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
     body {
@@ -135,6 +135,26 @@
       z-index: 5;
       filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
     }
+    #leaderboard {
+      display: none;
+      margin-top: 20px;
+      background: #fff8f0cc;
+      border-radius: 15px;
+      padding: 15px 20px;
+      box-shadow: 0 6px 12px #d18ca4aa;
+      max-width: 100%;
+      color: #3b2f2f;
+      font-weight: bold;
+    }
+    #leaderboard table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: center;
+    }
+    #leaderboard th, #leaderboard td {
+      border: 1px solid #d18ca4;
+      padding: 8px;
+    }
     @media (max-width: 600px) {
       #game-container {
         padding-left: 20px;
@@ -146,52 +166,48 @@
         flex: 1 1 100%;
       }
     }
-	
-	/* ปุ่มทั้งหมด */
-button {
-  font-family: 'Kanit', sans-serif;
-  font-size: 1.2rem;
-  padding: 10px 20px;
-  margin: 8px;
-  border: none;
-  border-radius: 20px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-}
-
-/* ปุ่มแต่ละสี */
-button[onclick*="startGame"] {
-  background-color: #fddde6;
-  color: #d63384;
-}
-button[onclick*="nextQuestion"] {
-  background-color: #ddf0ff;
-  color: #007bff;
-}
-button[onclick*="endGame"] {
-  background-color: #ffe4cc;
-  color: #ff6600;
-}
-button[onclick*="resetGame"] {
-  background-color: #e6ffdd;
-  color: #28a745;
-}
-
-/* hover effect */
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
-}
-
-/* focus (keyboard nav) */
-button:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
-}
+    /* ปุ่มทั้งหมด */
+    button {
+      font-family: 'Kanit', sans-serif;
+      font-size: 1.2rem;
+      padding: 10px 20px;
+      margin: 8px;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    /* ปุ่มแต่ละสี */
+    button[onclick*="startGame"] {
+      background-color: #fddde6;
+      color: #d63384;
+    }
+    button[onclick*="nextQuestion"] {
+      background-color: #ddf0ff;
+      color: #007bff;
+    }
+    button[onclick*="endGame"] {
+      background-color: #ffe4cc;
+      color: #ff6600;
+    }
+    button[onclick*="resetGame"] {
+      background-color: #e6ffdd;
+      color: #28a745;
+    }
+    /* hover effect */
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, 0.15);
+    }
+    /* focus (keyboard nav) */
+    button:focus {
+      outline: none;
+      box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.4);
+    }
   </style>
 </head>
 <body>
@@ -209,19 +225,20 @@ button:focus {
     <div id="info-row"></div>
 
     <img id="character-img" src="mind.png" alt="ตัวละคร" />
-	  <div id="leaderboard" style="display:none;">
-  <h2>🏆 Leaderboard</h2>
-  <table border="1" cellpadding="5" style="border-collapse: collapse; width: 300px;">
-    <thead>
-      <tr>
-        <th>อันดับ</th>
-        <th>ชื่อ</th>
-        <th>คะแนน</th>
-      </tr>
-    </thead>
-    <tbody id="leaderboard-body"></tbody>
-  </table>
-</div>
+    
+    <div id="leaderboard">
+      <h2>🏆 Leaderboard</h2>
+      <table>
+        <thead>
+          <tr>
+            <th>อันดับ</th>
+            <th>ชื่อ</th>
+            <th>คะแนน</th>
+          </tr>
+        </thead>
+        <tbody id="leaderboard-body"></tbody>
+      </table>
+    </div>
   </div>
 
   <div style="text-align:center; margin-top:10px; width:90%; max-width:700px;">
@@ -229,42 +246,16 @@ button:focus {
     <button onclick="nextQuestion()">➡️ คำถามถัดไป</button>
     <button onclick="endGame()">⛔ จบเกม</button>
     <button onclick="resetGame()">🔄 เริ่มใหม่ (ล้างข้อมูล)</button>
-	<button onclick="downloadScores()">📥 ดาวน์โหลดคะแนน</button>
+    <button onclick="downloadScores()">📥 ดาวน์โหลดคะแนน</button>
   </div>
-<audio id="bgm" loop preload="auto">
-  <source src="background-music.mp3" type="audio/mpeg">
-</audio>
-	<audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
-	<script>
 
-function downloadScores() {
-  const gameRef = db.ref("games/" + gameId + "/players");
-  gameRef.once("value").then((snapshot) => {
-    const players = snapshot.val() || {};
-    let content = "📊 รายงานคะแนนนักเรียน \n\n";
+  <audio id="bgm" loop preload="auto">
+    <source src="background-music.mp3" type="audio/mpeg" />
+  </audio>
+  <audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
 
-    // 🔽 แปลงเป็น array แล้วเรียงคะแนนจากมากไปน้อย
-    const sortedPlayers = Object.entries(players).sort(([, a], [, b]) => (b.score || 0) - (a.score || 0));
-
-    for (const [, player] of sortedPlayers) {
-      const name = player.name || "ไม่ระบุชื่อ";
-      const score = player.score || 0;
-      content += `👤 ${name}: ${score} คะแนน\n`;
-    }
-
-    // สร้าง Blob แล้วดาวน์โหลด
-    const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "คะแนนนักเรียน.txt";
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
-}
-		const wrongSound = document.getElementById('wrong-sound');
+  <script>
+    // 1) กำหนด Firebase config และ initialize
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
       authDomain: "gameddc-78b15.firebaseapp.com",
@@ -275,60 +266,62 @@ function downloadScores() {
       appId: "1:1029473303694:web:d773ccddbb152495f79ddf",
       measurementId: "G-8DB314K2EJ"
     };
-
     firebase.initializeApp(firebaseConfig);
     const db = firebase.database();
     const gameId = "myGame";
 
+    const wrongSound = document.getElementById('wrong-sound');
+
+    // คำถามตัวอย่าง
     const sampleQuestions = [
       {
         question: "600 คือกลุ่มหมวดหมู่ใดในระบบ DDC?",
         choices: ["ศาสนา", "เทคโนโลยี", "ภาษา", "ประวัติศาสตร์"],
         answer: 1,
-  	"image": "https://tiger123042.github.io/project-ddc-game/mind2.png"
+        image: "https://tiger123042.github.io/project-ddc-game/mind2.png"
       },
       {
         question: "100 คือกลุ่มหมวดหมู่ใดในระบบ DDC?",
         choices: ["ปรัชญาและจิตวิทยา", "วิทยาศาสตร์", "ศิลปะ", "ภาษา"],
         answer: 0,
-  	"image": "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
+        image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
       }
     ];
 
     let countdown = null;
     let timeLeft = 10;
 
-function startGame() {
-	
-  db.ref("games/" + gameId + "/players").once("value").then((snap) => {
-    const players = snap.val() || {};
-    const playerCount = Object.keys(players).length;
+    // เริ่มเกม
+    function startGame() {
+      db.ref("games/" + gameId + "/players").once("value").then((snap) => {
+        const players = snap.val() || {};
+        const playerCount = Object.keys(players).length;
 
-    if (playerCount === 0) {
-      alert("⚠️ กรุณาให้ผู้เล่นเข้าร่วมก่อนเริ่มเกม");
-      return;
-    }
+        if (playerCount === 0) {
+          alert("⚠️ กรุณาให้ผู้เล่นเข้าร่วมก่อนเริ่มเกม");
+          return;
+        }
 
-    const bgm = document.getElementById("bgm");
-    if (bgm) {
-      bgm.play().catch(err => {
-        console.warn("เพลงยังไม่สามารถเล่นได้จนกว่าผู้ใช้จะคลิกบางอย่าง", err);
+        const bgm = document.getElementById("bgm");
+        if (bgm) {
+          bgm.play().catch(err => {
+            console.warn("เพลงยังไม่สามารถเล่นได้จนกว่าผู้ใช้จะคลิกบางอย่าง", err);
+          });
+        }
+        document.getElementById("playerList").style.display = "none";
+        db.ref("games/" + gameId).update({
+          status: "playing",
+          currentQuestionIndex: 0,
+          questions: sampleQuestions,
+          players: players
+        });
+
+        showCountdown();
       });
     }
-    document.getElementById("playerList").style.display = "none";
-    db.ref("games/" + gameId).update({
-      status: "playing",
-      currentQuestionIndex: 0,
-      questions: sampleQuestions,
-      players: players
-    });
 
-    showCountdown();
-  });
-}
-
+    // คำถามถัดไป
     function nextQuestion() {
-
       db.ref("games/" + gameId + "/currentQuestionIndex").once("value").then((snap) => {
         let current = snap.val() || 0;
         current++;
@@ -342,6 +335,7 @@ function startGame() {
       });
     }
 
+    // จบเกม
     function endGame() {
       db.ref("games/" + gameId + "/status").set("ended");
       clearInterval(countdown);
@@ -350,15 +344,17 @@ function startGame() {
       document.getElementById("answerStats").innerHTML = "";
       document.getElementById("playerList").innerHTML = "";
       document.getElementById("info-row").innerText = "";
+      showLeaderboard();
     }
 
+    // รีเซ็ตเกม (ล้างข้อมูล)
     function resetGame() {
       db.ref("games").remove().then(() => {
         location.reload();
       });
     }
 
-    // แสดงคำถามปัจจุบัน
+    // แสดงคำถามปัจจุบันและตัวเลือก
     db.ref("games/" + gameId).on("value", (snap) => {
       const game = snap.val();
       if (!game || !game.questions) return;
@@ -367,14 +363,16 @@ function startGame() {
 
       if (game.status === "playing" && qIndex < game.questions.length) {
         const q = game.questions[qIndex];
-	document.getElementById("character-img").src = q.image || "mind.png";
+        document.getElementById("character-img").src = q.image || "mind.png";
         document.getElementById("dialog-box").innerText = "❓ " + q.question;
-        document.getElementById("choices").innerHTML = q.choices.map((choice, idx) => 
+        document.getElementById("choices").innerHTML = q.choices.map((choice, idx) =>
           `<button disabled>${choice}</button>`
         ).join('');
+        // ซ่อน leaderboard ถ้าโชว์อยู่
+        document.getElementById("leaderboard").style.display = "none";
       } else if (game.status === "ended") {
-	            wrongSound.play();
-        document.getElementById("dialog-box").innerText = "🎉 เกมจบแล้ว";	      
+        wrongSound.play();
+        document.getElementById("dialog-box").innerText = "🎉 เกมจบแล้ว";
         document.getElementById("choices").innerHTML = "";
       } else {
         document.getElementById("dialog-box").innerText = "";
@@ -397,6 +395,7 @@ function startGame() {
       }
     });
 
+    // นับถอยหลังเวลา
     function showCountdown() {
       clearInterval(countdown);
       timeLeft = 10;
@@ -413,6 +412,7 @@ function startGame() {
       }, 1000);
     }
 
+    // แสดงสถิติคำตอบ
     function updateAnswerStats(showStats) {
       const answerStatsEl = document.getElementById("answerStats");
 
@@ -442,68 +442,75 @@ function startGame() {
             `<li>${choice}: ${counts[i]} คน</li>`
           ).join("");
           document.getElementById("info-row").innerText = "⏰ หมดเวลาแล้ว!";
-		      wrongSound.play();
+          wrongSound.play();
         });
       });
     }
 
-		
-// ฟังก์ชันโชว์ Leaderboard
-function showLeaderboard() {
-  const playersRef = db.ref("games/" + gameId + "/players");
-  playersRef.once("value").then(snapshot => {
-    const players = snapshot.val() || {};
+    // ฟังก์ชันดาวน์โหลดคะแนน
+    function downloadScores() {
+      const gameRef = db.ref("games/" + gameId + "/players");
+      gameRef.once("value").then((snapshot) => {
+        const players = snapshot.val() || {};
+        let content = "📊 รายงานคะแนนนักเรียน \n\n";
 
-    // แปลงเป็น array แล้วเรียงคะแนน
-    const sortedPlayers = Object.values(players).sort((a, b) => b.score - a.score);
+        // แปลงเป็น array แล้วเรียงคะแนนจากมากไปน้อย
+        const sortedPlayers = Object.entries(players).sort(([, a], [, b]) => (b.score || 0) - (a.score || 0));
 
-    let tbodyHTML = "";
-    sortedPlayers.forEach((player, index) => {
-      tbodyHTML += `
-        <tr>
-          <td>${index + 1}</td>
-          <td>${player.name || "ไม่ระบุชื่อ"}</td>
-          <td>${player.score || 0}</td>
-        </tr>
-      `;
+        for (const [, player] of sortedPlayers) {
+          const name = player.name || "ไม่ระบุชื่อ";
+          const score = player.score || 0;
+          content += `👤 ${name}: ${score} คะแนน\n`;
+        }
+
+        // สร้าง Blob แล้วดาวน์โหลด
+        const blob = new Blob([content], { type: "text/plain;charset=utf-8" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "คะแนนนักเรียน.txt";
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      });
+    }
+
+    // ฟังก์ชันโชว์ Leaderboard
+    function showLeaderboard() {
+      const playersRef = db.ref("games/" + gameId + "/players");
+      playersRef.once("value").then(snapshot => {
+        const players = snapshot.val() || {};
+
+        // แปลงเป็น array แล้วเรียงคะแนน
+        const sortedPlayers = Object.values(players).sort((a, b) => (b.score || 0) - (a.score || 0));
+
+        let tbodyHTML = "";
+        sortedPlayers.forEach((player, index) => {
+          tbodyHTML += `
+            <tr>
+              <td>${index + 1}</td>
+              <td>${player.name || "ไม่ระบุชื่อ"}</td>
+              <td>${player.score || 0}</td>
+            </tr>
+          `;
+        });
+
+        // ใส่ข้อมูลในตาราง
+        document.getElementById("leaderboard-body").innerHTML = tbodyHTML;
+
+        // ซ่อนรูปตัวละคร แล้วโชว์ Leaderboard
+        document.getElementById("character-img").style.display = "none";
+        document.getElementById("leaderboard").style.display = "block";
+      });
+    }
+
+    // ตรวจจับสถานะเกมเปลี่ยน ถ้า ended ให้โชว์ Leaderboard
+    db.ref("games/" + gameId + "/status").on("value", (snapshot) => {
+      if (snapshot.val() === "ended") {
+        showLeaderboard();
+      }
     });
-
-    // ใส่ข้อมูลในตาราง
-    document.getElementById("leaderboard-body").innerHTML = tbodyHTML;
-
-    // ซ่อนรูปมายด์ แล้วโชว์ Leaderboard
-    document.getElementById("character-container").style.display = "none";
-    document.getElementById("leaderboard").style.display = "block";
-  });
-}
-
-// ตัวอย่างการตรวจจับจบเกม (สถานะ gameOver)
-db.ref("games/" + gameId + "/status").on("value", (snapshot) => {
-  if (snapshot.val() === "gameOver") {
-    showLeaderboard();
-  }
-});
-		
   </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
