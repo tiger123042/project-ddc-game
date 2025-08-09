@@ -5,207 +5,225 @@
   <title>จัดหมู่หนังสือ DDC</title>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-database-compat.js"></script>
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
-  
+ <style>
+@import url('https://fonts.googleapis.com/css2?family=Kanit&display=swap');
 
-    body {
-    margin: 0;
-    font-family: 'Kanit', sans-serif;
-    background: #fef6e4 url('https://cdn.pixabay.com/photo/2016/11/29/10/07/notebook-1869347_1280.jpg') no-repeat center center fixed;
-    background-size: cover;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    min-height: 100vh;
-    overflow: hidden;
-    color: #3b2f2f;
-  }
-    h1 {
-      margin: 20px;
-      color: #d6336c;
-      text-shadow: 1px 1px 2px #fff;
-      font-size: 2.4rem;
-      text-align: center;
-    }
-    #game-container {
-      width: 90%;
-      max-width: 700px;
-      height: 70vh;
-      background: #fff8f0;
-      border-radius: 25px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 20px 40px 20px 320px;
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-    }
-    #game-container::before {
-      content: "";
-      position: absolute;
-      top: 10px; bottom: 10px; left: 10px; right: 10px;
-      border: 3px dashed #d18ca4;
-      border-radius: 25px;
-      pointer-events: none;
-      mix-blend-mode: multiply;
-      opacity: 0.3;
-    }
-    #dialog-box {
-      max-width: 100%;
-      width: 100%;
-      padding: 10px;
-      font-size: 1.2em;
-      word-wrap: break-word;
-      word-break: break-word;
-      box-sizing: border-box;
-      background-color: #fff;
-      border-radius: 10px;
-      margin-bottom: 12px;
-      position: relative;
-      z-index: 10;
-      min-height: 70px;
-      font-weight: bold;
-      color: #3b2f2f;
-      text-align: center;
-    }
-    #choices {
-      margin-top: 10px;
-      display: flex;
-      flex-wrap: wrap;
-      gap: 10px;
-      justify-content: center;
-      z-index: 20;
-    }
-    #choices button {
-      flex: 1 1 45%;
-      background: #d6336c;
-      color: #fff;
-      border: none;
-      border-radius: 16px;
-      padding: 14px;
-      font-size: 1rem;
-      cursor: pointer;
-      transition: background 0.25s;
-      box-shadow: 0 4px 8px #d6336c88;
-      user-select: none;
-    }
-    #choices button:hover:not(:disabled) {
-      background: #a6284a;
-      box-shadow: 0 6px 12px #a6284aaa;
-    }
-    #choices button:disabled {
-      background: #ccc;
-      color: #666;
-      cursor: default;
-      box-shadow: none;
-    }
-    #score-display,
-    #timer-display {
-      margin-top: 0px;
-      font-size: 1.2rem;
-      color: #ff6b6b;
-      font-weight: bold;
-      text-align: center;
-      z-index: 20;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 12px;
-      padding: 6px 10px;
-      user-select: none;
-    }
-    #character-img {
-      position: absolute;
-      top: 120px;
-      left: 40px;
-      width: 280px;
-      height: 420px;
-      object-fit: contain;
-      user-select: none;
-      pointer-events: none;
-      z-index: 5;
-      filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
-    }
-    #nameInputContainer {
-      position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      background: #fff8f0;
-      border-radius: 25px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-      padding: 30px 40px;
-      width: 90%;
-      max-width: 400px;
-      text-align: center;
-      z-index: 20;
-    }
+body {
+  margin: 0;
+  font-family: 'Kanit', sans-serif;
+  background: #fef6e4 url('https://cdn.pixabay.com/photo/2016/11/29/10/07/notebook-1869347_1280.jpg') no-repeat center center fixed;
+  background-size: cover;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-height: 100vh;
+  color: #3b2f2f;
+}
 
-   
-    #nameInputContainer label {
-      font-weight: bold;
-      color: #d6336c;
-      font-size: 1.2rem;
-    }
-    #playerName {
-      margin-left: 8px;
-      font-size: 1.1rem;
-      padding: 6px 12px;
-      border-radius: 12px;
-      border: 2px solid #d6336c;
-      outline-color: #a6284a;
-      width: 180px;
-    }
-    #joinBtn {
-      margin-top: 14px;
-      background: #d6336c;
-      border: none;
-      border-radius: 16px;
-      padding: 12px 30px;
-      font-size: 1.15rem;
-      color: white;
-      cursor: pointer;
-      box-shadow: 0 5px 10px #d6336cbb;
-      transition: background 0.3s;
-      user-select: none;
-    }
-    #joinBtn:hover {
-      background: #a6284a;
-      box-shadow: 0 7px 14px #a6284aaa;
-    }
-    @media (max-width: 600px) {
-      #game-container {
-        padding-left: 20px;
-      }
-      #character-img {
-        display: none;
-      }
-      #choices button {
-        flex: 1 1 100%;
-      }
-      #dialog-box {
-        font-size: 1rem;
-      }
-      #nameInputContainer {
-        width: 90%;
-        padding: 20px 30px;
-      }
-      #playerName {
-        width: 140px;
-      }
-    }
-      .correct {
-    background-color: #28a745 !important; /* สีเขียว */
-    box-shadow: 0 0 12px 4px #28a745aa !important;
-    color: white !important;
+h1 {
+  margin: 20px;
+  color: #d6336c;
+  text-shadow: 1px 1px 2px #fff;
+  font-size: 2.4rem;
+  text-align: center;
+}
+
+#game-container {
+  width: 90%;
+  max-width: 700px;
+  min-height: 60vh; /* สูงขั้นต่ำ */
+  max-height: calc(100vh - 40px); /* ไม่ให้เกินจอ */
+  background: #fff8f0;
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px 40px 20px 320px;
+  position: relative;
+  overflow-y: auto; /* ถ้าเนื้อหาเยอะก็เลื่อน */
+  cursor: default;
+  box-sizing: border-box; /* รวม padding ในการคำนวณขนาด */
+}
+
+#game-container::before {
+  content: "";
+  position: absolute;
+  top: 10px; bottom: 10px; left: 10px; right: 10px;
+  border: 3px dashed #d18ca4;
+  border-radius: 25px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.3;
+}
+
+#dialog-box {
+  max-width: 100%;
+  width: 100%;
+  padding: 10px;
+  font-size: 1.2em;
+  word-wrap: break-word;
+  word-break: break-word;
+  box-sizing: border-box;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  position: relative;
+  z-index: 10;
+  min-height: 70px;
+  font-weight: bold;
+  color: #3b2f2f;
+  text-align: center;
+}
+
+#choices {
+  margin-top: 10px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  z-index: 20;
+}
+
+#choices button {
+  flex: 1 1 45%;
+  background: #d6336c;
+  color: #fff;
+  border: none;
+  border-radius: 16px;
+  padding: 14px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.25s;
+  box-shadow: 0 4px 8px #d6336c88;
+  user-select: none;
+}
+
+#choices button:hover:not(:disabled) {
+  background: #a6284a;
+  box-shadow: 0 6px 12px #a6284aaa;
+}
+
+#choices button:disabled {
+  background: #ccc;
+  color: #666;
+  cursor: default;
+  box-shadow: none;
+}
+
+#score-display,
+#timer-display {
+  margin-top: 0px;
+  font-size: 1.2rem;
+  color: #ff6b6b;
+  font-weight: bold;
+  text-align: center;
+  z-index: 20;
+  background: rgba(255, 255, 255, 0.85);
+  border-radius: 12px;
+  padding: 6px 10px;
+  user-select: none;
+}
+
+#character-img {
+  position: absolute;
+  top: 120px;
+  left: 40px;
+  width: 280px;
+  height: auto; /* ปรับอัตโนมัติ */
+  max-height: calc(100% - 140px); /* ไม่ล้นกล่อง */
+  object-fit: contain;
+  user-select: none;
+  pointer-events: none;
+  z-index: 5;
+  filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
+}
+
+#nameInputContainer {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff8f0;
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+  padding: 30px 40px;
+  width: 90%;
+  max-width: 400px;
+  text-align: center;
+  z-index: 20;
+}
+
+#nameInputContainer label {
+  font-weight: bold;
+  color: #d6336c;
+  font-size: 1.2rem;
+}
+
+#playerName {
+  margin-left: 8px;
+  font-size: 1.1rem;
+  padding: 6px 12px;
+  border-radius: 12px;
+  border: 2px solid #d6336c;
+  outline-color: #a6284a;
+  width: 180px;
+}
+
+#joinBtn {
+  margin-top: 14px;
+  background: #d6336c;
+  border: none;
+  border-radius: 16px;
+  padding: 12px 30px;
+  font-size: 1.15rem;
+  color: white;
+  cursor: pointer;
+  box-shadow: 0 5px 10px #d6336cbb;
+  transition: background 0.3s;
+  user-select: none;
+}
+
+#joinBtn:hover {
+  background: #a6284a;
+  box-shadow: 0 7px 14px #a6284aaa;
+}
+
+@media (max-width: 600px) {
+  #game-container {
+    padding-left: 20px;
   }
-  .wrong {
-    background-color: #dc3545 !important; /* สีแดง */
-    box-shadow: 0 0 12px 4px #dc3545aa !important;
-    color: white !important;
+  #character-img {
+    display: none;
   }
-  </style>
+  #choices button {
+    flex: 1 1 100%;
+  }
+  #dialog-box {
+    font-size: 1rem;
+  }
+  #nameInputContainer {
+    width: 90%;
+    padding: 20px 30px;
+  }
+  #playerName {
+    width: 140px;
+  }
+}
+
+.correct {
+  background-color: #28a745 !important; /* สีเขียว */
+  box-shadow: 0 0 12px 4px #28a745aa !important;
+  color: white !important;
+}
+
+.wrong {
+  background-color: #dc3545 !important; /* สีแดง */
+  box-shadow: 0 0 12px 4px #dc3545aa !important;
+  color: white !important;
+}
+</style>
+
 </head>
 <body>
   <h1>👤 ผู้เล่น</h1>
@@ -422,6 +440,7 @@
   </script>
 </body>
 </html>
+
 
 
 
