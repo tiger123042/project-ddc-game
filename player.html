@@ -180,13 +180,10 @@
   }
 
   #game-container {
-    width: 95%;
     height: auto; /* ให้สูงตามเนื้อหา */
-    padding: 15px; 
-    box-sizing: border-box;
-    padding-left: 15px; /* ลด padding-left */
+    min-height: auto;
+    padding-bottom: 20px; /* กันติดขอบล่าง */
   }
-
   #character-img {
     position: relative; /* เอา absolute ออก */
     width: 70%;
@@ -217,14 +214,16 @@
     min-height: auto;
   }
 
-  #choices {
-    gap: 4px;
+    #choices {
+    display: flex;
+    flex-direction: column; /* เรียงปุ่มเป็นคอลัมน์ */
+    gap: 10px; /* เว้นระยะปุ่ม */
   }
 
   #choices button {
-    flex: 1 1 100%;
-    font-size: 1.2rem;
-    padding: 12px;
+    width: 100%; 
+    font-size: 1.4rem; /* ตัวหนังสือใหญ่ขึ้น */
+    padding: 14px 10px;
   }
 }
   </style>
@@ -444,6 +443,7 @@
   </script>
 </body>
 </html>
+
 
 
 
