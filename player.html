@@ -28,32 +28,42 @@
       font-size: 2.4rem;
       text-align: center;
     }
-   #game-container {
-  width: 90%;
-  max-width: 700px;
-  height: 70vh;
-  background: #fff8f0;
-  border-radius: 25px;
-  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
-  /* padding-left แบบ default */
-  padding: 20px 40px 20px 320px;
-  position: relative;
-  overflow: hidden;
-  cursor: default;
-  z-index: 1;
-}
-    #game-container::before {
-      content: "";
-      position: absolute;
-      top: 10px; bottom: 10px; left: 10px; right: 10px;
-      border: 3px dashed #d18ca4;
+    /* container หลัก */
+    #game-container {
+      width: 90%;
+      max-width: 700px;
+      height: 70vh;
+      background: #fff8f0;
       border-radius: 25px;
+      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-start;
+      padding: 20px 40px 20px 320px; /* padding ซ้ายสำหรับ desktop ให้เว้นที่ภาพ */
+      position: relative; /* เพื่อให้ #character-img absolute อยู่ในนี้ */
+      overflow: hidden;
+      cursor: default;
+      z-index: 1;
+    }
+    /* ภาพตัวละคร */
+    #character-img {
+      position: absolute;
+      top: 100px;
+      left: 40px;
+      width: 280px;
+      height: 420px;
+      object-fit: contain;
+      user-select: none;
       pointer-events: none;
-      mix-blend-mode: multiply;
-      opacity: 0.3;
+      z-index: 0; /* ต่ำกว่าเนื้อหา */
+      filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
+      opacity: 1;
+    }
+    /* กล่องข้อความ และปุ่ม ต้องอยู่ด้านบนภาพเสมอ */
+    #dialog-box,
+    #choices {
+      position: relative;
+      z-index: 1;
     }
     #dialog-box {
       max-width: 100%;
@@ -66,9 +76,6 @@
       background-color: #fff;
       border-radius: 10px;
       margin-bottom: 12px;
-      position: relative;
-      z-index: 10;
-      min-height: 70px;
       font-weight: bold;
       color: #3b2f2f;
       text-align: center;
@@ -79,7 +86,7 @@
       flex-wrap: wrap;
       gap: 10px;
       justify-content: center;
-      z-index: 20;
+      z-index: 1;
     }
     #choices button {
       flex: 1 1 45%;
@@ -104,31 +111,7 @@
       cursor: default;
       box-shadow: none;
     }
-    #score-display,
-    #timer-display {
-      margin-top: 0px;
-      font-size: 1.2rem;
-      color: #ff6b6b;
-      font-weight: bold;
-      text-align: center;
-      z-index: 20;
-      background: rgba(255, 255, 255, 0.85);
-      border-radius: 12px;
-      padding: 6px 10px;
-      user-select: none;
-    }
-    #character-img {
-      position: absolute;
-      top: 100px;
-      left: 40px;
-      width: 280px;
-      height: 420px;
-      object-fit: contain;
-      user-select: none;
-      pointer-events: none;
-      z-index: 5;
-      filter: drop-shadow(3px 4px 4px rgba(0,0,0,0.3));
-    }
+    /* Container ชื่อผู้เล่น (modal) */
     #nameInputContainer {
       position: absolute;
       top: 50%;
@@ -143,8 +126,6 @@
       text-align: center;
       z-index: 20;
     }
-
-   
     #nameInputContainer label {
       font-weight: bold;
       color: #d6336c;
@@ -176,58 +157,97 @@
       background: #a6284a;
       box-shadow: 0 7px 14px #a6284aaa;
     }
-@media (max-width: 600px) {
-  #game-container {
-    padding-left: 45vw; /* เว้นซ้ายพอสำหรับภาพมือถือ */
-  }
 
-  #character-img {
-    position: absolute;
-    top: 5vh;
-    left: 3vw;
-    width: 40vw;
-    max-width: 220px;
-    height: auto;
-    max-height: 55vh;
-    z-index: 0; /* อยู่ด้านหลัง */
-    opacity: 0.9;
-    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
-  }
+    /* --- ปรับสำหรับมือถือ --- */
+    @media (max-width: 600px) {
+      /* ลด padding ซ้ายให้พอดีกับมือถือ */
+      #game-container {
+        padding-left: 20px !important;
+      }
 
-  #dialog-box {
-    position: relative;
-    z-index: 2; /* ให้อยู่บนภาพ */
-    background: rgba(255, 255, 255, 0.85);
-    border-radius: 12px;
-    padding: 1em;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
-    font-size: 0.9rem;
-    max-height: 50vh;
-    overflow-y: auto;
-  }
+      /* ภาพตัวละคร เลื่อนซ้าย ให้เล็กลงและอยู่ด้านหลัง */
+      #character-img {
+        top: 5vh !important;
+        left: 3vw !important;
+        width: 40vw !important;
+        max-width: 220px !important;
+        height: auto !important;
+        max-height: 55vh !important;
+        opacity: 0.9 !important;
+        filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3)) !important;
+        z-index: 0 !important; /* อยู่ด้านหลัง */
+      }
 
-  #choices {
-    position: relative;
-    z-index: 2;
-    margin-top: 10px;
-    display: flex;
-    flex-wrap: wrap;
-    gap: 6px;
-    justify-content: center;
-    padding: 0 10px;
-  }
-
-  #choices button {
-    flex: 1 1 calc(50% - 12px);
-    padding: 8px 4px;
-    font-size: 0.85rem;
-    min-width: 120px;
-    max-width: 40vw;
-    margin: 0;
-  }
-}
-
-
+      /* กล่องข้อความและปุ่มอยู่ด้านบนภาพ */
+      #dialog-box {
+        font-size: 1rem;
+        max-height: 50vh;
+        overflow-y: auto;
+        background: rgba(255, 255, 255, 0.85);
+        padding: 1em;
+        border-radius: 12px;
+        box-shadow: 0 0 10px rgba(0,0,0,0.2);
+        position: relative;
+        z-index: 1;
+      }
+      #choices {
+        margin-top: 10px;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        justify-content: center;
+        padding: 0 10px;
+        position: relative;
+        z-index: 1;
+      }
+      #choices button {
+        flex: 1 1 calc(50% - 12px);
+        padding: 8px 4px;
+        font-size: 0.85rem;
+        margin: 0;
+        min-width: 120px;
+        max-width: 40vw;
+      }
+    }
+    /* --- จอขนาดกลาง --- */
+    @media (min-width: 601px) and (max-width: 767px) {
+      #choices button {
+        flex: 1 1 35%;
+        font-size: 1rem;
+        min-width: 150px;
+        max-width: 30vw;
+      }
+      #dialog-box {
+        padding-left: 150px;
+        font-size: 1.1rem;
+        max-height: 60vh;
+      }
+      #character-img {
+        top: 10px;
+        left: 30px;
+        width: 35vw;
+        max-width: 250px;
+        height: auto;
+        max-height: 450px;
+      }
+    }
+    /* --- จอใหญ่ --- */
+    @media (min-width: 768px) {
+      #choices button {
+        flex: 1 1 40%;
+        font-size: 1rem;
+      }
+      #dialog-box {
+        padding-left: 150px;
+        font-size: 1.2rem;
+      }
+      #character-img {
+        top: 20px;
+        left: 40px;
+        width: 300px;
+        height: 480px;
+      }
+    }
   </style>
 </head>
 <body>
@@ -258,7 +278,6 @@
   <audio id="correct-sound" src="correct.mp3" preload="auto"></audio>
   <audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
   <audio id="yay-sound" src="yay.mp3" preload="auto"></audio>
-
   <script>
     const correctSound = document.getElementById('correct-sound');
     const yaySound = document.getElementById('yay-sound');
@@ -444,6 +463,7 @@
   </script>
 </body>
 </html>
+
 
 
 
