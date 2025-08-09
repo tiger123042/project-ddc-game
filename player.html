@@ -174,41 +174,60 @@
       box-shadow: 0 7px 14px #a6284aaa;
     }
  @media (max-width: 600px) {
-  #game-container {
-    padding: 20px;
-    padding-top: 280px; /* เผื่อพื้นที่ให้ background ตัวละครโชว์ */
-    background-image: url('mind.png'); /* ใส่ภาพตัวละครเป็น background */
-    background-repeat: no-repeat;
-    background-position: top center;
-    background-size: 280px 420px; /* ขนาดภาพเหมือนเดิม */
-  }
-  #character-img {
-    display: none; /* ซ่อน img ตัวละคร */
-  }
-  #dialog-box {
-    font-size: 1rem;
-    margin-top: 10px;
-    background: rgba(255 255 255 / 0.9);
-    border-radius: 12px;
-    padding: 12px;
-  }
-  #choices {
-    margin-top: 10px;
-    flex-direction: column; /* เรียงปุ่มเป็นแนวตั้ง */
-    gap: 10px;
-  }
-  #choices button {
-    flex: none;
-    width: 100%;
-  }
-  #nameInputContainer {
-    width: 90%;
-    padding: 20px 30px;
-  }
-  #playerName {
-    width: 100%;
-  }
-}
+      #game-container {
+        padding-left: 20px !important;
+        padding-top: 280px !important; /* เว้นที่ให้ภาพตัวละครแสดง */
+        padding-right: 20px !important;
+        height: auto !important;
+        background-image: url('mind.png');
+        background-repeat: no-repeat;
+        background-position: top center;
+        background-size: 280px 420px;
+        border-radius: 20px;
+      }
+      #character-img {
+        display: none !important;
+      }
+      #dialog-box {
+        font-size: 1rem;
+        margin-top: 10px;
+        background: rgba(255 255 255 / 0.9);
+        border-radius: 12px;
+        padding: 12px;
+        text-align: center;
+        position: relative;
+        z-index: 10;
+        min-height: 70px;
+        font-weight: bold;
+        color: #3b2f2f;
+      }
+      #choices {
+        margin-top: 10px;
+        flex-direction: column !important;
+        gap: 10px !important;
+        justify-content: center !important;
+        display: flex !important;
+      }
+      #choices button {
+        flex: none !important;
+        width: 100% !important;
+      }
+      #nameInputContainer {
+        width: 90%;
+        padding: 20px 30px;
+        position: relative !important;
+        top: auto !important;
+        left: auto !important;
+        transform: none !important;
+        z-index: 20;
+        background: #fff8f0;
+        border-radius: 25px;
+        box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+      }
+      #playerName {
+        width: 100%;
+      }
+    }
     
       .correct {
     background-color: #28a745 !important; /* สีเขียว */
@@ -437,4 +456,5 @@
   </script>
 </body>
 </html>
+
 
