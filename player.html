@@ -174,36 +174,59 @@
       box-shadow: 0 7px 14px #a6284aaa;
     }
     @media (max-width: 600px) {
-      #game-container {
-        padding-left: 20px;
-      }
-      #character-img {
-        display: none;
-      }
-      #choices button {
-        flex: 1 1 100%;
-      }
-      #dialog-box {
-        font-size: 1rem;
-      }
-      #nameInputContainer {
-        width: 90%;
-        padding: 20px 30px;
-      }
-      #playerName {
-        width: 140px;
-      }
-    }
-      .correct {
-    background-color: #28a745 !important; /* สีเขียว */
-    box-shadow: 0 0 12px 4px #28a745aa !important;
-    color: white !important;
+  body {
+    background-attachment: scroll; /* ไม่ fixed เพื่อให้เลื่อนตามมือถือ */
+    overflow: auto; /* ให้เลื่อนลงได้ */
   }
-  .wrong {
-    background-color: #dc3545 !important; /* สีแดง */
-    box-shadow: 0 0 12px 4px #dc3545aa !important;
-    color: white !important;
+
+  #game-container {
+    width: 95%;
+    height: auto; /* ปรับสูงตามเนื้อหา */
+    padding: 15px; /* ลด padding ให้พอดีจอ */
+    box-sizing: border-box;
   }
+
+  #character-img {
+    position: static; /* ไม่ fix ตำแหน่ง */
+    width: 60%;
+    max-width: 200px;
+    height: auto;
+    margin: 0 auto 10px auto;
+    display: block; /* แสดงบนมือถือแต่ย่อขนาด */
+  }
+
+  #dialog-box {
+    font-size: 1rem;
+    min-height: auto;
+    padding: 8px;
+  }
+
+  #choices {
+    gap: 8px;
+  }
+
+  #choices button {
+    flex: 1 1 100%;
+    font-size: 1rem;
+    padding: 12px;
+  }
+
+  #score-display,
+  #timer-display {
+    font-size: 1rem;
+    padding: 5px 8px;
+  }
+
+  #nameInputContainer {
+    width: 95%;
+    padding: 20px;
+  }
+
+  #playerName {
+    width: 100%;
+    max-width: 180px;
+  }
+}
   </style>
 </head>
 <body>
@@ -421,4 +444,5 @@
   </script>
 </body>
 </html>
+
 
