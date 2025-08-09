@@ -140,8 +140,6 @@
       text-align: center;
       z-index: 20;
     }
-
-   
     #nameInputContainer label {
       font-weight: bold;
       color: #d6336c;
@@ -173,7 +171,19 @@
       background: #a6284a;
       box-shadow: 0 7px 14px #a6284aaa;
     }
- @media (max-width: 600px) {
+    .correct {
+      background-color: #28a745 !important; /* สีเขียว */
+      box-shadow: 0 0 12px 4px #28a745aa !important;
+      color: white !important;
+    }
+    .wrong {
+      background-color: #dc3545 !important; /* สีแดง */
+      box-shadow: 0 0 12px 4px #dc3545aa !important;
+      color: white !important;
+    }
+
+    /* Mobile Styles */
+    @media (max-width: 600px) {
       #game-container {
         padding-left: 20px !important;
         padding-top: 280px !important; /* เว้นที่ให้ภาพตัวละครแสดง */
@@ -228,17 +238,6 @@
         width: 100%;
       }
     }
-    
-      .correct {
-    background-color: #28a745 !important; /* สีเขียว */
-    box-shadow: 0 0 12px 4px #28a745aa !important;
-    color: white !important;
-  }
-  .wrong {
-    background-color: #dc3545 !important; /* สีแดง */
-    box-shadow: 0 0 12px 4px #dc3545aa !important;
-    color: white !important;
-  }
   </style>
 </head>
 <body>
@@ -266,13 +265,14 @@
   <audio id="bgm" loop preload="auto">
     <source src="background-music.mp3" type="audio/mpeg">
   </audio>
-<audio id="correct-sound" src="correct.mp3" preload="auto"></audio>
-<audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
-<audio id="yay-sound" src="yay.mp3" preload="auto"></audio>
+  <audio id="correct-sound" src="correct.mp3" preload="auto"></audio>
+  <audio id="wrong-sound" src="wrong.mp3" preload="auto"></audio>
+  <audio id="yay-sound" src="yay.mp3" preload="auto"></audio>
+
   <script>
-      const correctSound = document.getElementById('correct-sound');
-  const yaySound = document.getElementById('yay-sound');
-  const wrongSound = document.getElementById('wrong-sound');
+    const correctSound = document.getElementById('correct-sound');
+    const yaySound = document.getElementById('yay-sound');
+    const wrongSound = document.getElementById('wrong-sound');
     const firebaseConfig = {
       apiKey: "AIzaSyDS0LklfDoBqDsL_ghsjLTKSQHE7n6pwZs",
       authDomain: "gameddc-78b15.firebaseapp.com",
@@ -366,66 +366,65 @@
     }
 
     function showQuestion(question, qIndex) {
-  statusDiv.innerText = question.question;
-  choicesDiv.innerHTML = "";
+      statusDiv.innerText = question.question;
+      choicesDiv.innerHTML = "";
 
-  // แสดงภาพมายด์ตาม URL ที่มากับคำถาม
-  const characterImg = document.getElementById("character-img");
-  if (question.image) {
-    characterImg.src = question.image;
-  } else {
-    characterImg.src = "mind.png"; // รูป default
-  }
+      // แสดงภาพมายด์ตาม URL ที่มากับคำถาม
+      const characterImg = document.getElementById("character-img");
+      if (question.image) {
+        characterImg.src = question.image;
+      } else {
+        characterImg.src = "mind.png"; // รูป default
+      }
 
-  question.choices.forEach((choice, idx) => {
-    const btn = document.createElement("button");
-    btn.innerText = choice;
-    btn.disabled = false;
-    btn.onclick = () => submitAnswer(idx, question.answer, qIndex);
-    choicesDiv.appendChild(btn);
-  });
-}
-
-  function submitAnswer(choiceIdx, correctIdx, questionIndex) {
-  if (answered) return;
-  answered = true;
-  clearInterval(timerInterval);
-
-  let gotItRight = (choiceIdx === correctIdx);
-  if (gotItRight) score++;
-
-  db.ref(`games/${gameId}/players/${playerKey}`).update({ score });
-
-  db.ref(`games/${gameId}/answers/${playerKey}`).set({
-    choiceIndex: choiceIdx,
-    questionIndex: questionIndex,
-    timestamp: Date.now()
-  });
-
-  updateScoreDisplay();
-
-  // เปลี่ยนสีปุ่มตามถูกผิด
-  document.querySelectorAll("#choices button").forEach((btn, idx) => {
-    btn.disabled = true;
-    if (idx === correctIdx) {
-      btn.classList.add('correct');
+      question.choices.forEach((choice, idx) => {
+        const btn = document.createElement("button");
+        btn.innerText = choice;
+        btn.disabled = false;
+        btn.onclick = () => submitAnswer(idx, question.answer, qIndex);
+        choicesDiv.appendChild(btn);
+      });
     }
-    if (idx === choiceIdx && choiceIdx !== correctIdx) {
-      btn.classList.add('wrong');
-    }
-  });
 
-  // เล่นเสียงแยกตามถูกผิด
-  if (gotItRight) {
-    correctSound.play();
-    // เล่นเสียง 'yay' เลยหลัง correct เสร็จ 1 วิ (ถ้าต้องการ)
-    setTimeout(() => {
-      yaySound.play();
-    }, 500);
-  } else {
-    wrongSound.play();
-  }
-}
+    function submitAnswer(choiceIdx, correctIdx, questionIndex) {
+      if (answered) return;
+      answered = true;
+      clearInterval(timerInterval);
+
+      let gotItRight = (choiceIdx === correctIdx);
+      if (gotItRight) score++;
+
+      db.ref(`games/${gameId}/players/${playerKey}`).update({ score });
+
+      db.ref(`games/${gameId}/answers/${playerKey}`).set({
+        choiceIndex: choiceIdx,
+        questionIndex: questionIndex,
+        timestamp: Date.now()
+      });
+
+      updateScoreDisplay();
+
+      // เปลี่ยนสีปุ่มตามถูกผิด
+      document.querySelectorAll("#choices button").forEach((btn, idx) => {
+        btn.disabled = true;
+        if (idx === correctIdx) {
+          btn.classList.add('correct');
+        }
+        if (idx === choiceIdx && choiceIdx !== correctIdx) {
+          btn.classList.add('wrong');
+        }
+      });
+
+      // เล่นเสียงแยกตามถูกผิด
+      if (gotItRight) {
+        correctSound.play();
+        setTimeout(() => {
+          yaySound.play();
+        }, 500);
+      } else {
+        wrongSound.play();
+      }
+    }
 
     function updateScore(game) {
       if (playerKey && game.players && game.players[playerKey]) {
@@ -448,7 +447,6 @@
           clearInterval(timerInterval);
           timerDiv.innerText = "หมดเวลา!";
           answered = true;
-          // ปุ่มทั้งหมด disable ทันที แต่ไม่มีเฉลยสีปุ่ม
           document.querySelectorAll("#choices button").forEach(btn => btn.disabled = true);
         }
       }, 1000);
@@ -456,5 +454,3 @@
   </script>
 </body>
 </html>
-
-
