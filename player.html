@@ -174,7 +174,7 @@
       background: #a6284a;
       box-shadow: 0 7px 14px #a6284aaa;
     }
-   @media (max-width: 600px) {
+  @media (max-width: 600px) {
   body {
     background-attachment: scroll; /* ไม่ fixed เพื่อให้เลื่อนตามมือถือ */
     overflow-x: hidden; /* ป้องกันเลื่อนซ้ายขวา */
@@ -183,7 +183,7 @@
   #game-container {
     width: 95%;
     max-width: 400px;
-    height: 400px;
+    height: auto; /* ให้สูงตามเนื้อหา */
     padding: 15px;
     margin: 0 auto;
     box-sizing: border-box;
@@ -193,7 +193,7 @@
     position: static;
     width: 60%;
     max-width: 180px;
-    height: 50px;
+    height: auto;
     margin: 0 auto 10px auto;
     display: block;
   }
@@ -207,13 +207,13 @@
   #choices {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 8px;
   }
 
   #choices button {
     width: 100%;
-    font-size: 1rem;
-    padding: 10px;
+    font-size: 1.4rem;
+    padding: 12px;
     box-sizing: border-box;
     border-radius: 6px;
   }
@@ -456,6 +456,7 @@
   </script>
 </body>
 </html>
+
 
 
 
