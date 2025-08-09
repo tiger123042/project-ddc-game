@@ -173,32 +173,48 @@
       background: #a6284a;
       box-shadow: 0 7px 14px #a6284aaa;
     }
-    @media (max-width: 600px) {
+ @media (max-width: 600px) {
   body {
-    background-attachment: scroll; /* ไม่ fixed เพื่อให้เลื่อนตามมือถือ */
-    overflow: auto; /* ให้เลื่อนลงได้ */
+    background-attachment: scroll;
+    overflow: auto;
   }
 
   #game-container {
     width: 95%;
-    height: 40%; /* ปรับสูงตามเนื้อหา */
-    padding: 15px; /* ลด padding ให้พอดีจอ */
+    height: auto; /* ให้สูงตามเนื้อหา */
+    padding: 15px; 
     box-sizing: border-box;
+    padding-left: 15px; /* ลด padding-left */
   }
 
   #character-img {
-    position: static; /* ไม่ fix ตำแหน่ง */
-    width: 60%;
+    position: relative; /* เอา absolute ออก */
+    width: 70%;
     max-width: 200px;
     height: auto;
     margin: 0 auto 10px auto;
-    display: block; /* แสดงบนมือถือแต่ย่อขนาด */
+    display: block;
+  }
+
+  #nameInputContainer {
+    position: relative;
+    top: auto;
+    left: auto;
+    transform: none;
+    width: 100%;
+    padding: 20px;
+    margin-top: 10px;
+  }
+
+  #playerName {
+    width: 100%;
+    max-width: none;
   }
 
   #dialog-box {
     font-size: 1rem;
-    min-height: auto;
     padding: 8px;
+    min-height: auto;
   }
 
   #choices {
@@ -207,24 +223,8 @@
 
   #choices button {
     flex: 1 1 100%;
-    font-size: 1.5rem;
+    font-size: 1.2rem;
     padding: 12px;
-  }
-
-  #score-display,
-  #timer-display {
-    font-size: 1rem;
-    padding: 5px 8px;
-  }
-
-  #nameInputContainer {
-    width: 95%;
-    padding: 20px;
-  }
-
-  #playerName {
-    width: 100%;
-    max-width: 180px;
   }
 }
   </style>
@@ -444,6 +444,7 @@
   </script>
 </body>
 </html>
+
 
 
 
