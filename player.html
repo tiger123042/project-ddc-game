@@ -176,9 +176,7 @@
     }
 @media (max-width: 600px) {
   #game-container {
-    position: relative;
-    padding-left: 45vw; /* เว้นที่ซ้ายให้ภาพ */
-    z-index: 1; /* ให้อยู่เหนือภาพ */
+    padding-left: 45vw; /* เว้นซ้ายพอสำหรับภาพมือถือ */
   }
 
   #character-img {
@@ -189,35 +187,31 @@
     max-width: 220px;
     height: auto;
     max-height: 55vh;
-    object-fit: contain;
-    user-select: none;
-    pointer-events: none;
     z-index: 0; /* อยู่ด้านหลัง */
     opacity: 0.9;
     filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
   }
 
-  #dialog-box, #choices {
-    position: relative;
-    z-index: 1; /* อยู่ด้านหน้า */
-  }
-
   #dialog-box {
+    position: relative;
+    z-index: 2; /* ให้อยู่บนภาพ */
+    background: rgba(255, 255, 255, 0.85);
+    border-radius: 12px;
+    padding: 1em;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
     font-size: 0.9rem;
     max-height: 50vh;
     overflow-y: auto;
-    background: rgba(255, 255, 255, 0.8);
-    padding: 1em;
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.2);
   }
 
   #choices {
+    position: relative;
+    z-index: 2;
+    margin-top: 10px;
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
     gap: 6px;
-    margin-top: 10px;
+    justify-content: center;
     padding: 0 10px;
   }
 
@@ -225,54 +219,13 @@
     flex: 1 1 calc(50% - 12px);
     padding: 8px 4px;
     font-size: 0.85rem;
-    margin: 0;
     min-width: 120px;
     max-width: 40vw;
+    margin: 0;
   }
 }
 
-@media (min-width: 601px) and (max-width: 767px) {
-  #choices button {
-    flex: 1 1 35%;
-    font-size: 1rem;
-    min-width: 150px;
-    max-width: 30vw;
-  }
 
-  #dialog-box {
-    padding-left: 150px;
-    font-size: 1.1rem;
-    max-height: 60vh;
-  }
-
-  #character-img {
-    top: 10px;
-    left: 30px;
-    width: 35vw;
-    max-width: 250px;
-    height: auto;
-    max-height: 450px;
-  }
-}
-
-@media (min-width: 768px) {
-  #choices button {
-    flex: 1 1 40%;
-    font-size: 1rem;
-  }
-
-  #dialog-box {
-    padding-left: 150px;
-    font-size: 1.2rem;
-  }
-
-  #character-img {
-    top: 20px;
-    left: 40px;
-    width: 300px;
-    height: 480px;
-  }
-}
   </style>
 </head>
 <body>
@@ -489,6 +442,7 @@
   </script>
 </body>
 </html>
+
 
 
 
