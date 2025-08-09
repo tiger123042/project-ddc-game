@@ -28,21 +28,23 @@
       font-size: 2.4rem;
       text-align: center;
     }
-    #game-container {
-      width: 90%;
-      max-width: 700px;
-      height: 70vh;
-      background: #fff8f0;
-      border-radius: 25px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 20px 40px 20px 320px;
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-    }
+   #game-container {
+  width: 90%;
+  max-width: 700px;
+  height: 70vh;
+  background: #fff8f0;
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  /* padding-left แบบ default */
+  padding: 20px 40px 20px 320px;
+  position: relative;
+  overflow: hidden;
+  cursor: default;
+  z-index: 1;
+}
     #game-container::before {
       content: "";
       position: absolute;
@@ -442,6 +444,7 @@
   </script>
 </body>
 </html>
+
 
 
 
