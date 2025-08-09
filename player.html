@@ -116,7 +116,7 @@
     }
     #character-img {
       position: absolute;
-      top: 100px;
+      top: 120px;
       left: 40px;
       width: 280px;
       height: 420px;
@@ -173,70 +173,37 @@
       background: #a6284a;
       box-shadow: 0 7px 14px #a6284aaa;
     }
- @media (max-width: 600px) {
-  body {
-    background-attachment: scroll;
-    overflow: auto;
+    @media (max-width: 600px) {
+      #game-container {
+        padding-left: 20px;
+      }
+      #character-img {
+        display: none;
+      }
+      #choices button {
+        flex: 1 1 100%;
+      }
+      #dialog-box {
+        font-size: 1rem;
+      }
+      #nameInputContainer {
+        width: 90%;
+        padding: 20px 30px;
+      }
+      #playerName {
+        width: 140px;
+      }
+    }
+      .correct {
+    background-color: #28a745 !important; /* สีเขียว */
+    box-shadow: 0 0 12px 4px #28a745aa !important;
+    color: white !important;
   }
-
-   #game-container {
-    display: flex !important;
-    flex-direction: column !important;
-    align-items: center !important;
-    justify-content: flex-start !important;
-    padding: 15px !important;
-    padding-left: 15px !important; /* ลด padding ซ้าย */
-    height: auto !important;
-    min-height: auto !important;
+  .wrong {
+    background-color: #dc3545 !important; /* สีแดง */
+    box-shadow: 0 0 12px 4px #dc3545aa !important;
+    color: white !important;
   }
-   #character-img {
-    position: relative !important;
-    width: 60% !important;
-    max-width: 200px !important;
-    height: auto !important;
-    margin: 0 auto 15px auto !important;
-    display: block !important;
-  }
-     #question-container {
-    width: 100% !important;
-    margin: 0 auto !important;
-    text-align: center !important;
-  }
-
-  #nameInputContainer {
-    position: relative;
-    top: auto;
-    left: auto;
-    transform: none;
-    width: 100%;
-    padding: 20px;
-    margin-top: 10px;
-  }
-
-  #playerName {
-    width: 100%;
-    max-width: none;
-  }
-
-  #dialog-box {
-    font-size: 1rem;
-    padding: 8px;
-    min-height: auto;
-  }
-
-  #choices {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    gap: 12px !important;
-    margin-top: 10px !important;
-  }
-  #choices button {
-    width: 100% !important;
-    font-size: 1.4rem !important;
-    padding: 14px 10px !important;
-  }
-}
   </style>
 </head>
 <body>
@@ -454,9 +421,3 @@
   </script>
 </body>
 </html>
-
-
-
-
-
-
