@@ -175,6 +175,43 @@
       box-shadow: 0 7px 14px #a6284aaa;
     }
 @media (max-width: 600px) {
+  #game-container {
+    position: relative;
+    padding-left: 45vw; /* เว้นที่ซ้ายให้ภาพ */
+    z-index: 1; /* ให้อยู่เหนือภาพ */
+  }
+
+  #character-img {
+    position: absolute;
+    top: 5vh;
+    left: 3vw;
+    width: 40vw;
+    max-width: 220px;
+    height: auto;
+    max-height: 55vh;
+    object-fit: contain;
+    user-select: none;
+    pointer-events: none;
+    z-index: 0; /* อยู่ด้านหลัง */
+    opacity: 0.9;
+    filter: drop-shadow(2px 4px 6px rgba(0,0,0,0.3));
+  }
+
+  #dialog-box, #choices {
+    position: relative;
+    z-index: 1; /* อยู่ด้านหน้า */
+  }
+
+  #dialog-box {
+    font-size: 0.9rem;
+    max-height: 50vh;
+    overflow-y: auto;
+    background: rgba(255, 255, 255, 0.8);
+    padding: 1em;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  }
+
   #choices {
     display: flex;
     flex-wrap: wrap;
@@ -187,30 +224,10 @@
   #choices button {
     flex: 1 1 calc(50% - 12px);
     padding: 8px 4px;
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     margin: 0;
-    min-width: 120px; /* ให้ปุ่มไม่เล็กเกิน */
-    max-width: 45vw;  /* ไม่เกินครึ่งหน้าจอ */
-  }
-
-  #dialog-box {
-    padding-left: 40vw; /* กะให้มีที่ว่างซ้ายสำหรับภาพ */
-    font-size: 1rem;
-    max-height: 55vh;
-    overflow-y: auto; /* กันข้อความล้น */
-  }
-
-  #character-img {
-    position: absolute;
-    top: -5vh;
-    left: 20vw;
-    width: 40vw;
-    height: auto;
-    max-height: 60vh;
-    object-fit: contain;
-    user-select: none;
-    pointer-events: none;
-    z-index: 1;
+    min-width: 120px;
+    max-width: 40vw;
   }
 }
 
@@ -472,6 +489,7 @@
   </script>
 </body>
 </html>
+
 
 
 
