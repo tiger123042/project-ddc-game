@@ -173,27 +173,43 @@
       background: #a6284a;
       box-shadow: 0 7px 14px #a6284aaa;
     }
-    @media (max-width: 600px) {
-      #game-container {
-        padding-left: 20px;
-      }
-      #character-img {
-        display: none;
-      }
-      #choices button {
-        flex: 1 1 100%;
-      }
-      #dialog-box {
-        font-size: 1rem;
-      }
-      #nameInputContainer {
-        width: 90%;
-        padding: 20px 30px;
-      }
-      #playerName {
-        width: 140px;
-      }
-    }
+ @media (max-width: 600px) {
+  #game-container {
+    padding: 20px;
+    padding-top: 280px; /* เผื่อพื้นที่ให้ background ตัวละครโชว์ */
+    background-image: url('mind.png'); /* ใส่ภาพตัวละครเป็น background */
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 280px 420px; /* ขนาดภาพเหมือนเดิม */
+  }
+  #character-img {
+    display: none; /* ซ่อน img ตัวละคร */
+  }
+  #dialog-box {
+    font-size: 1rem;
+    margin-top: 10px;
+    background: rgba(255 255 255 / 0.9);
+    border-radius: 12px;
+    padding: 12px;
+  }
+  #choices {
+    margin-top: 10px;
+    flex-direction: column; /* เรียงปุ่มเป็นแนวตั้ง */
+    gap: 10px;
+  }
+  #choices button {
+    flex: none;
+    width: 100%;
+  }
+  #nameInputContainer {
+    width: 90%;
+    padding: 20px 30px;
+  }
+  #playerName {
+    width: 100%;
+  }
+}
+    
       .correct {
     background-color: #28a745 !important; /* สีเขียว */
     box-shadow: 0 0 12px 4px #28a745aa !important;
@@ -421,3 +437,4 @@
   </script>
 </body>
 </html>
+
