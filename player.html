@@ -199,20 +199,21 @@
     }
 
     /* Mobile Styles */
-    @media (max-width: 600px) {
-     #game-container {
-  padding-left: 20px !important;
-  padding-top: 280px !important; /* เว้นที่ให้ภาพตัวละครแสดง */
-  padding-right: 20px !important;
-  height: auto; /* หรือ 40vh ถ้าต้องการกำหนดความสูงตายตัว */
-  min-height: 320px; /* สูงขั้นต่ำเพื่อให้ภาพตัวละครไม่ถูกบัง */
-  background-image: url('mind.png');
-  background-repeat: no-repeat;
-  background-position: top center;
-  background-size: 280px 350px;
-  border-radius: 20px;
-  box-shadow: 0 8px 18px rgba(204,85,156,0.3);
-}
+  #game-container {
+    padding-left: 20px !important;
+    padding-top: 280px !important; /* เว้นที่ให้ภาพตัวละครแสดง */
+    padding-right: 20px !important;
+    height: auto !important;  /* ไม่กำหนดความสูงตายตัว */
+    min-height: 320px !important; /* กำหนดสูงขั้นต่ำพอเหมาะ */
+    max-height: 480px !important; /* กำหนดสูงสูงสุดให้พอดี */
+    background-image: url('mind.png');
+    background-repeat: no-repeat;
+    background-position: top center;
+    background-size: 280px 350px;
+    border-radius: 20px;
+    box-shadow: 0 8px 18px rgba(204,85,156,0.3);
+    overflow-y: auto; /* เผื่อเนื้อหายาวให้เลื่อน */
+  }
       #character-img {
         display: none !important;
       }
@@ -477,6 +478,7 @@
   </script>
 </body>
 </html>
+
 
 
 
