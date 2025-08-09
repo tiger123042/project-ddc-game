@@ -179,18 +179,28 @@
     overflow: auto;
   }
 
-  #game-container {
-    height: auto; /* ให้สูงตามเนื้อหา */
-    min-height: auto;
-    padding-bottom: 20px; /* กันติดขอบล่าง */
+   #game-container {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: flex-start !important;
+    padding: 15px !important;
+    padding-left: 15px !important; /* ลด padding ซ้าย */
+    height: auto !important;
+    min-height: auto !important;
   }
-  #character-img {
-    position: relative; /* เอา absolute ออก */
-    width: 70%;
-    max-width: 200px;
-    height: auto;
-    margin: 0 auto 10px auto;
-    display: block;
+   #character-img {
+    position: relative !important;
+    width: 60% !important;
+    max-width: 200px !important;
+    height: auto !important;
+    margin: 0 auto 15px auto !important;
+    display: block !important;
+  }
+     #question-container {
+    width: 100% !important;
+    margin: 0 auto !important;
+    text-align: center !important;
   }
 
   #nameInputContainer {
@@ -214,16 +224,17 @@
     min-height: auto;
   }
 
-    #choices {
-    display: flex;
-    flex-direction: column; /* เรียงปุ่มเป็นคอลัมน์ */
-    gap: 10px; /* เว้นระยะปุ่ม */
+  #choices {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    gap: 12px !important;
+    margin-top: 10px !important;
   }
-
   #choices button {
-    width: 100%; 
-    font-size: 1.4rem; /* ตัวหนังสือใหญ่ขึ้น */
-    padding: 14px 10px;
+    width: 100% !important;
+    font-size: 1.4rem !important;
+    padding: 14px 10px !important;
   }
 }
   </style>
@@ -443,6 +454,7 @@
   </script>
 </body>
 </html>
+
 
 
 
