@@ -27,32 +27,34 @@
       font-size: 2.4rem;
       text-align: center;
     }
-    #game-container {
-      width: 90%;
-      max-width: 700px;
-      height: 70vh;
-      background: #fff8f0;
-      border-radius: 25px;
-      box-shadow: 0 12px 24px rgba(0,0,0,0.3);
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-start;
-      padding: 20px 40px 20px 320px; /* left padding ให้เหลือที่วางรูปตัวละคร */
-      position: relative;
-      overflow: hidden;
-      cursor: default;
-    }
+  #game-container {
+  width: 90%;
+  max-width: 700px;
+  min-height: 60vh; /* ความสูงขั้นต่ำ */
+  max-height: calc(100vh - 40px); /* ลบ margin/top-bottom ออกเพื่อไม่ให้ล้นจอ */
+  background: #fff8f0;
+  border-radius: 25px;
+  box-shadow: 0 12px 24px rgba(0,0,0,0.3);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  padding: 20px 40px 20px 320px;
+  position: relative;
+  overflow-y: auto; /* เปิดสกรอล์แนวตั้งถ้าข้อมูลยาว */
+  cursor: default;
+  box-sizing: border-box;
+}
 
-    #game-container::before {
-      content: "";
-      position: absolute;
-      top: 10px; bottom: 10px; left: 10px; right: 10px;
-      border: 3px dashed #d18ca4;
-      border-radius: 25px;
-      pointer-events: none;
-      mix-blend-mode: multiply;
-      opacity: 0.3;
-    }
+#game-container::before {
+  content: "";
+  position: absolute;
+  top: 10px; bottom: 10px; left: 10px; right: 10px;
+  border: 3px dashed #d18ca4;
+  border-radius: 25px;
+  pointer-events: none;
+  mix-blend-mode: multiply;
+  opacity: 0.3;
+}
     #dialog-box {
       max-width: 100%;
       width: 100%;
@@ -524,4 +526,5 @@
   </script>
 </body>
 </html>
+
 
