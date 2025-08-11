@@ -285,20 +285,69 @@
     const wrongSound = document.getElementById('wrong-sound');
 
     // คำถามตัวอย่าง
-    const sampleQuestions = [
-      {
-        question: "600 คือกลุ่มหมวดหมู่ใดในระบบ DDC?",
-        choices: ["ศาสนา", "เทคโนโลยี", "ภาษา", "ประวัติศาสตร์"],
-        answer: 1,
-        image: "https://tiger123042.github.io/project-ddc-game/mind2.png"
-      },
-      {
-        question: "100 คือกลุ่มหมวดหมู่ใดในระบบ DDC?",
-        choices: ["ปรัชญาและจิตวิทยา", "วิทยาศาสตร์", "ศิลปะ", "ภาษา"],
-        answer: 0,
-        image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
-      }
-    ];
+const sampleQuestions = [
+  {
+    question: "คุณเป็นบรรณารักษ์และมีหนังสือ 'คู่มือทำขนมไทย' จะจัดไว้ในหมวดไหน?",
+    choices: ["641 การทำอาหาร", "398 นิทานพื้นบ้าน", "745 งานฝีมือ", "915 ภูมิศาสตร์เอเชีย"],
+    answer: 0,
+    image: "https://tiger123042.github.io/project-ddc-game/mind2.png"
+  },
+  {
+    question: "เด็กนักเรียนมาหาคุณเพื่อยืมหนังสือดาราศาสตร์ คุณควรพาเขาไปที่หมวดเลขใด?",
+    choices: ["500", "520", "550", "910"],
+    answer: 1,
+    image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
+  },
+  {
+    question: "หนังสือใดต่อไปนี้ **ไม่** อยู่ในหมวด 300 สังคมศาสตร์?",
+    choices: ["เศรษฐศาสตร์", "การศึกษา", "การเมือง", "พฤกษศาสตร์"],
+    answer: 3,
+    image: "https://tiger123042.github.io/project-ddc-game/mind.png"
+  },
+  {
+    question: "หมวด 920 เกี่ยวข้องกับเนื้อหาแบบใด?",
+    choices: ["ชีวประวัติ", "แผนที่", "สารคดีสัตว์", "นิยายแฟนตาซี"],
+    answer: 0,
+    image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
+  },
+  {
+    question: "ถ้าหนังสือมีเลขหมู่ 398.2 หมายถึงอะไร?",
+    choices: ["เทพนิยายและนิทานพื้นบ้าน", "ประวัติศาสตร์โลก", "การท่องเที่ยว", "เทคโนโลยีอาหาร"],
+    answer: 0,
+    image: "https://tiger123042.github.io/project-ddc-game/mind3.png"
+  },
+  {
+    question: "คุณพบหนังสือ 'โปรแกรมมิ่งด้วย Python' บนชั้น 700 ศิลปะและการบันเทิง นี่ถูกต้องไหม?",
+    choices: ["ถูก", "ผิด ควรอยู่ 004-006 คอมพิวเตอร์", "ผิด ควรอยู่ 600 เทคโนโลยี", "ผิด ควรอยู่ 500 วิทยาศาสตร์"],
+    answer: 1,
+    image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
+  },
+  {
+    question: "ถ้าต้องการหาหนังสือเกี่ยวกับ 'การท่องเที่ยวในประเทศไทย' จะไปที่หมวดใด?",
+    choices: ["915.93", "390", "796", "641"],
+    answer: 0,
+    image: "https://tiger123042.github.io/project-ddc-game/mind2.png"
+  },
+  {
+    question: "หมวด 500 และ 600 ต่างกันอย่างไร?",
+    choices: ["500 = วิทยาศาสตร์ / 600 = ประยุกต์ใช้วิทยาศาสตร์", "500 = เทคโนโลยี / 600 = ศิลปะ", "500 = ศาสนา / 600 = ภาษา", "500 = ภาษา / 600 = ประวัติศาสตร์"],
+    answer: 0,
+    image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
+  },
+  {
+    question: "คุณกำลังจัดเรียงหนังสือเกี่ยวกับประวัติศาสตร์ยุโรป ควรใช้เลขหมู่ใด?",
+    choices: ["940", "950", "960", "970"],
+    answer: 0,
+    image: "https://tiger123042.github.io/project-ddc-game/mind2.png"
+  },
+  {
+    question: "หมวดใดใน DDC ที่ใช้มากที่สุดในห้องสมุดโรงเรียน?",
+    choices: ["000 เบ็ดเตล็ด", "300 สังคมศาสตร์", "400 ภาษา", "500 วิทยาศาสตร์"],
+    answer: 3,
+    image: "https://tiger123042.github.io/project-ddc-game/mindgif.gif"
+  }
+];
+
 
     let countdown = null;
     let timeLeft = 10;
@@ -526,6 +575,7 @@
   </script>
 </body>
 </html>
+
 
 
 
